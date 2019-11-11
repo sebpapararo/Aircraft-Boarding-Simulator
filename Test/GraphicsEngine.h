@@ -14,9 +14,9 @@
 #include <string>
 #include <fstream>
 
-//#include <iostream>
+// #include <iostream>
 
-//#include "GLFW/glfw3.h"
+// #include "GLFW/glfw3.h"
 
 class GraphicsEngine {
 public:

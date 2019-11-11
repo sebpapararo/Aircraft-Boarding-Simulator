@@ -59,7 +59,7 @@ void GraphicsEngine::init() {
 
 
 void GraphicsEngine::display() {
-	deltaTime();	//Temporary: render at 60 frames per second AND do movement based on time (not frames) using delta time in physics engine.
+	FPSLock();	//Temporary: render at 60 frames per second AND do movement based on time (not frames) using delta time in physics engine.
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -119,7 +119,7 @@ void GraphicsEngine::display() {
 
 
 //Locks frame rate to FRAMES_PER_SECOND
-void GraphicsEngine::deltaTime() {
+void GraphicsEngine::FPSLock() {
 	const int FRAMES_PER_SECOND = 60;
 	const int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
 	DWORD next_game_tick = GetTickCount();	//GetTickCount() returns the current number of milliseconds that have elapsed since the system was started

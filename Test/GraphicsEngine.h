@@ -21,12 +21,11 @@
 class GraphicsEngine {
 public:
 	void runGraphicsEngine(int argc, char** argv);
-	static void timer(int value);
 
 private:
 	static void init();
 	static void display();
-	static void deltaTime();
+	static void FPSLock();
 	//static void displayFPS();
 	static void infoDisplay(std::string outputString, float posX, float posY);
 	static void processKeys(unsigned char key, int x, int y);

@@ -41,6 +41,10 @@ SeatingStrategies SS;
 
 
 void GraphicsEngine::init() {
+	glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
+	glutKeyboardFunc(processKeys);
+	//glutSpecialFunc();
+
 	reshape(screenWidth, screenHeight);
 
 	Passenger1 = DO.loadPNG(passenger1Path);
@@ -191,11 +195,7 @@ void GraphicsEngine::runGraphicsEngine(int argc, char** argv) {
 	glutInitWindowSize(screenWidth, screenHeight);						// Set the window's initial width & height
 	glutInitWindowPosition(0, 0);						// Position the window's initial top-left corner
 	glutCreateWindow("Aircraft Boarding Simulation");	// Create a window with the given title
-	
-	glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
-	glutKeyboardFunc(processKeys);
-	//glutSpecialFunc();
-	
+
 	init();
 
 	glutDisplayFunc(display);							// Register display callback handler for window re-paint

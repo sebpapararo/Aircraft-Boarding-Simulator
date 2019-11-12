@@ -1,5 +1,6 @@
 #pragma once
 #include "Passenger.h"
+#include "GraphicsEngine.h"
 #include <glut/glut.h>  // GLUT, include glu.h and gl.h
 
 #include <vector>

@@ -97,5 +97,4 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 			}
 		}
 	}
-
 }

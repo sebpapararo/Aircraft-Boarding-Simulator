@@ -13,6 +13,7 @@
 
 #include <string>
 #include <fstream>
+#include <iostream>
 
 // #include <iostream>
 
@@ -25,7 +26,7 @@ public:
 private:
 	static void init();
 	static void display();
-	static void FPSLock();
+	static void FPSLock(int FPSCap);
 	//static void displayFPS();
 	static void infoDisplay(std::string outputString, float posX, float posY);
 	static void processKeys(unsigned char key, int x, int y);

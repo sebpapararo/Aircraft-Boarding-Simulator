@@ -19,7 +19,6 @@ void SeatingStrategies::backToFront(std::string &currentAlgorithm, int noOfRows,
 	}
 }
 
-
 // TODO: maybe change it so it treats the first row as part of the last 3 columns instead of the first 3
 void SeatingStrategies::seatBySeat(std::string &currentAlgorithm, int noOfRows, int noOfColumns, std::string aircraftName, vector<vector<vec2>> activeTemplate, vector<vector<vec2>> activeDoorPos, vector<Passenger> &activePassengers) {
 	currentAlgorithm = "Seat-By-Seat";
@@ -37,7 +36,6 @@ void SeatingStrategies::seatBySeat(std::string &currentAlgorithm, int noOfRows, 
 	}
 }
 
-
 void SeatingStrategies::rowByRow(std::string &currentAlgorithm, int noOfRows, vector<vector<vec2>> activeTemplate, vector<vector<vec2>> activeDoorPos, vector<Passenger> &activePassengers) {
 	currentAlgorithm = "Row-By-Row";
 	int count = 0;
@@ -49,7 +47,6 @@ void SeatingStrategies::rowByRow(std::string &currentAlgorithm, int noOfRows, ve
 		}
 	}
 }
-
 
 void SeatingStrategies::randomSeat(std::string &currentAlgorithm, int noOfRows, int noOfColumns, std::string aircraftName, vector<vector<vec2>> activeTemplate, vector<vector<vec2>> activeDoorPos, vector<Passenger> &activePassengers) {
 	currentAlgorithm = "Random";

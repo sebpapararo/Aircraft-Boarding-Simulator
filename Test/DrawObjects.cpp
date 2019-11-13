@@ -3,7 +3,6 @@
 void DrawObjects::loadObject(GLuint texture, float rotate, float xTranslation, float yTranslation, float x, float y, float texLength, float r, float g, float b)
 {
 	glPushMatrix();
-	//glClear(GL_COLOR_BUFFER_BIT);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 

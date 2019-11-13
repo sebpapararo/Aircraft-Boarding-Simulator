@@ -1,34 +1,24 @@
 #pragma once
 #include "glm\glm.hpp"
-#include "glm\gtc\matrix_transform.hpp"
-#include "glm\gtc\type_ptr.hpp"
-#include "glm\gtc\matrix_inverse.hpp"
 
 using glm::vec2;
 
 class Passenger {
 public:
 	Passenger(vec2 pos, vec2 init);
-
-	vec2 getSeatPos();
+	vec2 getSeatPos() const;
 	void setSeatPos(vec2 pos);
-
-	vec2 getInitPos();
+	vec2 getInitPos() const;
 	void setInitPos(vec2 init);
-
-	float getWalkingSpeed();
+	float getWalkingSpeed() const;
 	void setWalkingSpeed(float speed);
-
-	bool getIsAligned();
+	bool getIsAligned() const;
 	void setIsAligned(bool isLinedUp);
-
-	bool getIsRowFound();
+	bool getIsRowFound() const;
 	void setIsRowFound(bool isFound);
-
-	float getBaggageTimerStart();
+	float getBaggageTimerStart() const;
 	void setBaggageTimerStart(float time);
-
-	float getRotation();
+	float getRotation() const;
 	void setRotation(float newRotation);
 
 private:

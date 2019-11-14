@@ -9,8 +9,4 @@ class PhysicsEngine {
 public:
 	float passengerRadius = 2.0f;	//Collision detection
 	void updatePositions(vector<Passenger> &activePassengers, vector<Passenger> &activeSeatedPassengers, float aislePosY);
-
-private:
-
-
 };

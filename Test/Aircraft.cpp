@@ -5,13 +5,13 @@ AirbusA319::AirbusA319() {
 	templateName = "Airbus A319";
 	noOfRows = 26;
 	noOfColumns = 4;
-	float rowMove = 0.0f;
-	float rowMoveIncrement = 10.0f;
-	float exitGap = 15.0f;	//Emergency exit gap between seat rows
-	float x = -145.0f;
-	float y1 = 50.0f;
+	float rowMove = 0.0f;				// Initial row position
+	float rowMoveIncrement = 10.0f;		// Space between rows
+	float exitGap = 15.0f;				// Space between emergency row and normal row
+	float x = -145.0f;					// x coordinate of the left most row
+	float y1 = 50.0f;					// y coordinate of 1st column
 	float y2 = 45.0f;
-	aislePosY = 40.0f;
+	aislePosY = 40.0f;					// y coordinate of the aisle
 	float y3 = 35.0f;
 	float y4 = 30.0f;
 
@@ -29,7 +29,6 @@ AirbusA319::AirbusA319() {
 		rowMove += rowMoveIncrement;
 	}
 
-	//doorPos[front/rear][right/left]
 	doorPos.push_back({ vec2(-155.0f, 55.0f), vec2(-155.0f, 5.0f) });	//Index 0, front right and left doors
 	doorPos.push_back({ vec2(130.0f, 55.0f), vec2(130.0f, 5.0f) });		//Index 1, rear right and left doors
 
@@ -38,26 +37,26 @@ AirbusA319::AirbusA319() {
 }
 
 
-// Boeing 737-800
+// Boeing 737-800 constructor
 // https://www.seatguru.com/airlines/Thomson_Airways/Thomson_Airways_Boeing_737-800.php
 Boeing737::Boeing737() {
 	templateName = "Boeing 737-800";
 	noOfRows = 32;
 	noOfColumns = 6;
-	float rowMove = 0.0f;
-	float rowMoveIncrement = 10.0f;
-	float exitGap = 15.0f;	//Emergency exit gap between seat rows
-	float x = -165.0f;
-	float y1 = 50.0f;
+	float rowMove = 0.0f;				// Initial row position
+	float rowMoveIncrement = 10.0f;		// Space between rows
+	float exitGap = 15.0f;				// Space between emergency row and normal row
+	float x = -165.0f;					// x coordinate of the left most row
+	float y1 = 50.0f;					// y coordinate of 1st column
 	float y2 = 45.0f;
 	float y3 =40.0f;
-	aislePosY = 35.0f;
+	aislePosY = 35.0f;					// y coordinate of the aisle
 	float y4 = 30.0f;
 	float y5 = 25.0f;
 	float y6 = 20.0f;
 
 	for (int i = 0; i < 14; i++) {
-		if (i == 0) {
+		if (i == 0) {		// The first row only has 3 seats on the left of the plane
 			layout.push_back({ vec2(x + rowMove, y4), vec2(x + rowMove, y5), vec2(x + rowMove, y6) });
 		}
 		else {
@@ -78,7 +77,6 @@ Boeing737::Boeing737() {
 		rowMove += rowMoveIncrement;
 	}
 
-	//doorPos[front/rear][right/left]
 	doorPos.push_back({ vec2(-175.0f, 55.0f), vec2(-175.0f, 5.0f) });	//Index 0, front right and left doors
 	doorPos.push_back({ vec2(165.0f, 55.0f), vec2(165.0f, 5.0f) });		//Index 1, rear right and left doors
 
@@ -90,30 +88,30 @@ Boeing737::Boeing737() {
 
 /********* Other methods *********/
 
-vector<vector<vec2>> Aircraft::getTemplate() {
+vector<vector<vec2>> Aircraft::getTemplate() const {
 	return layout;
 }
 
-int Aircraft::getNoOfRows() {
+int Aircraft::getNoOfRows() const {
 	return noOfRows;
 }
 
-int Aircraft::getNoOfColumns() {
+int Aircraft::getNoOfColumns() const {
 	return noOfColumns;
 }
 
-float Aircraft::getAislePosY() {
+float Aircraft::getAislePosY() const {
 	return aislePosY;
 }
 
-std::string Aircraft::getTemplateName() {
+std::string Aircraft::getTemplateName() const {
 	return templateName;
 }
 
-vector<vector<vec2>> Aircraft::getDoorPos() {
+vector<vector<vec2>> Aircraft::getDoorPos() const {
 	return doorPos;
 }
 
-vector<vec2> Aircraft::getWallPos() {
+vector<vec2> Aircraft::getWallPos() const {
 	return wallPos;
 }

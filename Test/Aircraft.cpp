@@ -11,28 +11,30 @@ AirbusA319::AirbusA319() {
 	float x = -145.0f;					// x coordinate of the left most row
 	float y1 = 50.0f;					// y coordinate of 1st column
 	float y2 = 45.0f;
-	aislePosY = 40.0f;					// y coordinate of the aisle
-	float y3 = 35.0f;
+	float y3 = 40.0f;
+	aislePosY = 35.0f;
 	float y4 = 30.0f;
+	float y5 = 25.0f;
+	float y6 = 20.0f;
 
 	for (int i = 0; i < 9; i++) {
-		layout.push_back({ vec2(x + rowMove, y1), vec2(x + rowMove, y2), vec2(x + rowMove, y3), vec2(x + rowMove, y4) });
+		layout.push_back({ vec2(x + rowMove, y1), vec2(x + rowMove, y2), vec2(x + rowMove, y3), vec2(x + rowMove, y4), vec2(x + rowMove, y5), vec2(x + rowMove, y6) });
 		rowMove += rowMoveIncrement;
 	}
 
 	rowMove += -rowMoveIncrement + exitGap;
-	layout.push_back({ vec2(x + rowMove, y1), vec2(x + rowMove, y2), vec2(x + rowMove, y3), vec2(x + rowMove, y4) });
+	layout.push_back({ vec2(x + rowMove, y1), vec2(x + rowMove, y2), vec2(x + rowMove, y3), vec2(x + rowMove, y4), vec2(x + rowMove, y5), vec2(x + rowMove, y6) });
 	rowMove += exitGap;
 
 	for (int i = 0; i < 16; i++) {
-		layout.push_back({ vec2(x + rowMove, y1), vec2(x + rowMove, y2), vec2(x + rowMove, y3), vec2(x + rowMove, y4) });
+		layout.push_back({ vec2(x + rowMove, y1), vec2(x + rowMove, y2), vec2(x + rowMove, y3), vec2(x + rowMove, y4), vec2(x + rowMove, y5), vec2(x + rowMove, y6) });
 		rowMove += rowMoveIncrement;
 	}
 
 	doorPos.push_back({ vec2(-155.0f, 55.0f), vec2(-155.0f, 5.0f) });	//Index 0, front right and left doors
 	doorPos.push_back({ vec2(130.0f, 55.0f), vec2(130.0f, 5.0f) });		//Index 1, rear right and left doors
 
-	wallPos = { vec2(-180.0f, 25.0f),  vec2(-160.0f, 25.0f),  vec2(-150.0f, 25.0f),  vec2(-62.0f, 25.0f),  vec2(-53.0f, 25.0f),  vec2(-47.0f, 25.0f),  vec2(-38.0f, 25.0f),  vec2(125.0f, 25.0f),  vec2(135.0f, 25.0f),  vec2(145.0f, 25.0f),
+	wallPos = { vec2(-180.0f, 15.0f),  vec2(-160.0f, 15.0f),  vec2(-150.0f, 15.0f),  vec2(-62.0f, 15.0f),  vec2(-53.0f, 15.0f),  vec2(-47.0f, 15.0f),  vec2(-38.0f, 15.0f),  vec2(125.0f, 15.0f),  vec2(135.0f, 15.0f),  vec2(145.0f, 15.0f),
 				vec2(-180.0f, 55.0f),  vec2(-160.0f, 55.0f),  vec2(-150.0f, 55.0f),  vec2(-62.0f, 55.0f),  vec2(-53.0f, 55.0f),  vec2(-47.0f, 55.0f),  vec2(-38.0f, 55.0f),  vec2(125.0f, 55.0f),  vec2(135.0f, 55.0f),  vec2(145.0f, 55.0f) };
 }
 

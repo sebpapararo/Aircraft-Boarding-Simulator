@@ -8,6 +8,8 @@
 #include "SeatingStrategies.h"
 
 #include <string>
+#include <fstream>
+#include <iostream>
 
 class GraphicsEngine {
 public:
@@ -16,7 +18,7 @@ public:
 private:
 	static void init();
 	static void display();
-	static void FPSLock();
+	static void FPSLock(int FPSCap);
 	static void infoDisplay(std::string outputString, float posX, float posY);
 	static void processKeys(unsigned char key, int x, int y);
 	static void reshape(int width, int height);

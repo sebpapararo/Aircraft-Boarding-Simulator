@@ -1,10 +1,14 @@
 #include "GraphicsEngine.h"
 
+int window = 0;
+bool isConsole = false;
+bool isBoarded = false;
 int screenWidth = GetSystemMetrics(SM_CXSCREEN), screenHeight = GetSystemMetrics(SM_CYSCREEN);
 float aspect;
 bool keys[256];
 
 //FPS and runtime timing
+int FPSCap = 60;
 float FPS = 0.0f;
 double startTime;
 double totalRuntime;
@@ -51,51 +55,52 @@ void GraphicsEngine::init() {
 
 	//SS.backToFront(currentAlgorithm, noOfRows, activeTemplate, activeDoorPos, activePassengers);
 	//SS.seatBySeat(currentAlgorithm, noOfRows, noOfColumns, aircraftName, activeTemplate, activeDoorPos, activePassengers);
-	//SS.randomSeat(currentAlgorithm, noOfRows, noOfColumns, aircraftName, activeTemplate, activeDoorPos, activePassengers);
-	SS.rowByRow(currentAlgorithm, noOfRows, activeTemplate, activeDoorPos, activePassengers);
+	SS.randomSeat(currentAlgorithm, noOfRows, noOfColumns, aircraftName, activeTemplate, activeDoorPos, activePassengers);
+	//SS.rowByRow(currentAlgorithm, noOfRows, activeTemplate, activeDoorPos, activePassengers);
 
 	startTime = glutGet(GLUT_ELAPSED_TIME);
 }
 
 
 void GraphicsEngine::display() {
-	FPSLock();	//Temporary: render at 60 frames per second AND do movement based on time (not frames) using delta time in physics engine.
+	FPSLock(FPSCap);
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	//Draws seats
-	for (int i = 0; i < noOfRows; i++) {
-		for (size_t j = 0; j < activeTemplate[i].size(); j++) {
-			DO.loadObject(Seat1, 90.0f, activeTemplate[i][j].x, activeTemplate[i][j].y, seatHeight, seatWidth, 1.0f, 0.2f, 0.8f, 0.2f);
-		}
-	}
-
-	//Draws walls as lines
-	glColor3f(0.5f, 0.5f, 0.5f);
-	glLineWidth(5.0f);
-	glBegin(GL_LINES);
-	for (size_t i = 0; i < activeWallPos.size() - 1; i += 2) {
-		glVertex2f(activeWallPos[i].x, activeWallPos[i].y);
-		glVertex2f(activeWallPos[i + 1].x, activeWallPos[i + 1].y);
-	}
-	glEnd();
-
-
-	//Collision detection/passenger navigation
+	//Passenger navigation
 	PE.updatePositions(activePassengers, activeSeatedPassengers, aislePosY);
 
-	//Draws seeking passengers
-	for (size_t i = 0; i < activePassengers.size(); i++) {
-		vec2 tempInitPos = activePassengers[i].getInitPos();
-		float tempRotation = activePassengers[i].getRotation();
-		DO.loadObject(Passenger1, tempRotation, tempInitPos.x, tempInitPos.y, passengerHeight, passengerWidth, 1.0f, 1.0f, 1.0f, 1.0f);
-	}
+	if (!isConsole) {
+		//Draws seats
+		for (int i = 0; i < noOfRows; i++) {
+			for (size_t j = 0; j < activeTemplate[i].size(); j++) {
+				DO.loadObject(Seat1, 90.0f, activeTemplate[i][j].x, activeTemplate[i][j].y, seatHeight, seatWidth, 1.0f, 0.2f, 0.8f, 0.2f);
+			}
+		}
 
-	//Draws seated passengerss
-	for (size_t i = 0; i < activeSeatedPassengers.size(); i++) {
-		vec2 tempInitPos = activeSeatedPassengers[i].getInitPos();
-		DO.loadObject(Passenger1, 90.0f, tempInitPos.x, tempInitPos.y, passengerHeight, passengerWidth, 1.0f, 1.0f, 1.0f, 1.0f);
+		//Draws walls as lines
+		glColor3f(0.5f, 0.5f, 0.5f);
+		glLineWidth(5.0f);
+		glBegin(GL_LINES);
+		for (size_t i = 0; i < activeWallPos.size() - 1; i += 2) {
+			glVertex2f(activeWallPos[i].x, activeWallPos[i].y);
+			glVertex2f(activeWallPos[i + 1].x, activeWallPos[i + 1].y);
+		}
+		glEnd();
+
+		//Draws seeking passengers
+		for (size_t i = 0; i < activePassengers.size(); i++) {
+			vec2 tempInitPos = activePassengers[i].getInitPos();
+			float tempRotation = activePassengers[i].getRotation();
+			DO.loadObject(Passenger1, tempRotation, tempInitPos.x, tempInitPos.y, passengerHeight, passengerWidth, 1.0f, 1.0f, 1.0f, 1.0f);
+		}
+
+		//Draws seated passengerss
+		for (size_t i = 0; i < activeSeatedPassengers.size(); i++) {
+			vec2 tempInitPos = activeSeatedPassengers[i].getInitPos();
+			DO.loadObject(Passenger1, 90.0f, tempInitPos.x, tempInitPos.y, passengerHeight, passengerWidth, 1.0f, 1.0f, 1.0f, 1.0f);
+		}
 	}
 
 	//Runtime timing
@@ -103,14 +108,24 @@ void GraphicsEngine::display() {
 		double endTime = glutGet(GLUT_ELAPSED_TIME);
 		totalRuntime = (endTime - startTime) / 1000;
 	}
-	infoDisplay(runtimeResultText + std::to_string(totalRuntime), -150.0f, -80.0f);
 
-	// Display the current template name to the window
-	infoDisplay("Current plane template: " + selectedAircraft.getTemplateName(), -150.0f, -75.0f);
+	if (!isConsole) {
+		// Display the current algorithm to the window
+		infoDisplay("Boarding strategy: " + currentAlgorithm, -150.0f, -70.0f);
 
-	// Display the current algorithm to the window
-	infoDisplay("Current algorithm: " + currentAlgorithm, -150.0f, -70.0f);
+		// Display the current template name to the window
+		infoDisplay("Aircraft map: " + selectedAircraft.getTemplateName(), -150.0f, -75.0f);
 
+		infoDisplay(runtimeResultText + std::to_string(totalRuntime), -150.0f, -80.0f);
+	}
+
+	if (activePassengers.empty() && !isBoarded) {
+		isBoarded = true;
+		std::cout << "Boarding strategy strategy: " + currentAlgorithm << std::endl;
+		std::cout << "Aircraft map: " + selectedAircraft.getTemplateName() << std::endl;
+		std::cout << runtimeResultText + std::to_string(totalRuntime) << std::endl;
+	}
+	
 	glFlush();	//Render now
 	glutSwapBuffers();
 
@@ -119,8 +134,8 @@ void GraphicsEngine::display() {
 
 
 //Locks frame rate to FRAMES_PER_SECOND
-void GraphicsEngine::FPSLock() {
-	const int FRAMES_PER_SECOND = 60;
+void GraphicsEngine::FPSLock(int FPSCap) {
+	const int FRAMES_PER_SECOND = FPSCap;
 	const int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
 	DWORD next_game_tick = GetTickCount();	//GetTickCount() returns the current number of milliseconds that have elapsed since the system was started
 	int sleep_time = 0;
@@ -171,6 +186,12 @@ void GraphicsEngine::processKeys(unsigned char key, int x, int y) {	//Takes keyb
 	if (key == VK_ESCAPE) {	//Escape key closes the application
 		exit(0);
 	}
+	if (key == '1') {
+		isConsole = true;
+	}
+	if (key == '2') {
+		isConsole = false;
+	}
 }
 
 
@@ -194,7 +215,7 @@ void GraphicsEngine::runGraphicsEngine(int argc, char** argv) {
 	glutInit(&argc, argv);								// Initialize GLUT
 	glutInitWindowSize(screenWidth, screenHeight);						// Set the window's initial width & height
 	glutInitWindowPosition(0, 0);						// Position the window's initial top-left corner
-	glutCreateWindow("Aircraft Boarding Simulation");	// Create a window with the given title
+	window = glutCreateWindow("Aircraft Boarding Simulation");	// Create a window with the given title
 
 	init();
 

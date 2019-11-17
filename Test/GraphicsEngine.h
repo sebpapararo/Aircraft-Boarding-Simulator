@@ -17,10 +17,12 @@ public:
 
 private:
 	static void init();
+	static void initSettings(int strategy, int layout);
 	static void display();
 	static void FPSLock(int FPSCap);
 	static void infoDisplay(std::string outputString, float posX, float posY);
 	static void processKeys(unsigned char key, int x, int y);
+	static void processSpecialKeys(int key, int x, int y);
 	static void reshape(int width, int height);
 
 };

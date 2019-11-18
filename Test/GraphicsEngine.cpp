@@ -341,9 +341,3 @@ void GraphicsEngine::runGraphicsEngine(int argc, char** argv) {
 	glutDisplayFunc(display);							// Register display callback handler for window re-paint
 	glutMainLoop();
 }
-
-
-
-void GraphicsEngine::testFunction(int i) {
-	std::cout << "This is s and i: " << " and " << i << std::endl;
-}

@@ -14,7 +14,6 @@
 class GraphicsEngine {
 public:
 	static void runGraphicsEngine(int argc, char** argv);
-	static void testFunction(int i);
 
 private:
 	static void init();

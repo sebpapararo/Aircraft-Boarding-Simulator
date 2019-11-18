@@ -1,4 +1,5 @@
 #include "SeatingStrategies.h"
+#include <algorithm>
 
 // TODO: Needs to be completely rewritten to include zones otherwise it is just the same as row by row but backwards
 void SeatingStrategies::backToFront(std::string &currentAlgorithm, int noOfRows, vector<vector<vec2>> activeTemplate, vector<vector<vec2>> activeDoorPos, vector<Passenger> &activePassengers) {

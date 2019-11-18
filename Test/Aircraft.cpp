@@ -4,7 +4,7 @@
 AirbusA319::AirbusA319() {
 	templateName = "Airbus A319";
 	noOfRows = 26;
-	noOfColumns = 4;
+	noOfColumns = 6;
 	float rowMove = 0.0f;				// Initial row position
 	float rowMoveIncrement = 10.0f;		// Space between rows
 	float exitGap = 15.0f;				// Space between emergency row and normal row

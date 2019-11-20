@@ -244,6 +244,7 @@ void GraphicsEngine::processKeys(unsigned char key, int x, int y) {	//Takes keyb
 		if (!isStarted) {
 			isStarted = true;
 			initSettings(strategySelect, mapSelect);
+			startTime = glutGet(GLUT_ELAPSED_TIME);
 		}
 		else {
 			isStarted = false;

@@ -5,15 +5,9 @@ void SeatingStrategies::backToFront(std::string &currentAlgorithm, int noOfRows,
 	currentAlgorithm = "Back-To-Front";
 	int count = 0;
 	for (int i = 0; i < noOfRows; i++) {
-		for (size_t j = 0; j < activeTemplate[i].size(); j += 2) {
-			//Passenger *p = new Passenger(activeTemplate[i][j], activeDoorPos[1][0] + vec2(0.0f, (10.0f * count)));	//Sets seat and starting positions
-			//Passenger *p = new Passenger(activeTemplate[i][j], activeDoorPos[1][1] + vec2(0.0f, (-10.0f * count)));	//Sets seat and starting positions
-			//activePassengers.push_back(*p);
-
-			Passenger *p = new Passenger(activeTemplate[i][j], activeDoorPos[0][1] + vec2(0.0f, (-10.0f * count)));
-			Passenger *p2 = new Passenger(activeTemplate[i][j], activeDoorPos[1][1] + vec2(0.0f, (-10.0f * count)));
+		for (size_t j = 0; j < activeTemplate[i].size(); j++) {
+			Passenger *p = new Passenger(activeTemplate[i][j], activeDoorPos[1][1] + vec2(0.0f, (-10.0f * count)));	//Sets seat and starting positions
 			activePassengers.push_back(*p);
-			activePassengers.push_back(*p2);
 			count++;
 		}
 	}

@@ -6,7 +6,7 @@
 
 class ConsoleEngine {
 public:
-	void runConsoleEngine();
+	static void runConsoleEngine();
 	
 private:
 	static void init();

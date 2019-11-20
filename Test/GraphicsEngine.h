@@ -13,7 +13,7 @@
 
 class GraphicsEngine {
 public:
-	void runGraphicsEngine(int argc, char** argv);
+	static void runGraphicsEngine(int argc, char** argv);
 
 private:
 	static void init();

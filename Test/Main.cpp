@@ -10,7 +10,7 @@ int main(int argc, char** argv) {
 	std::cout << "Please enter the number corresponding to your choice: ";
 	std::cin >> choice; 
 
-	// Let them try again if entered any number other than 1 or 2
+	// Let the user try again if they entered an invalid number
 	while (choice != 1 && choice != 2)	{
 		std::cout << "Sorry, invalid number. Please enter '1' for a console version or '2' for a graphics version: ";
 		std::cin >> choice;
@@ -25,6 +25,5 @@ int main(int argc, char** argv) {
 		GE.runGraphicsEngine(argc, argv);
 	}
 	
-	std::getchar();
 	return 0;
 }

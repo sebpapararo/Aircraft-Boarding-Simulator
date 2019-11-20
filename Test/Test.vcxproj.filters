@@ -59,10 +59,10 @@
     <ClInclude Include="SeatingStrategies.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ConsoleEngine.h">
+    <ClInclude Include="Aircraft.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Aircraft.h">
+    <ClInclude Include="ConsoleEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

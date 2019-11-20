@@ -12,6 +12,7 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 		if (tempInitPos == activePassengers[i].getSeatPos()) {
 			activeSeatedPassengers.push_back(activePassengers[i]);
 			activePassengers.erase(activePassengers.begin() + i);
+			std::cout << "Passenger seated! " << activePassengers.size() << " passengers are left to be seated!" << std::endl;
 			continue;
 		}
 

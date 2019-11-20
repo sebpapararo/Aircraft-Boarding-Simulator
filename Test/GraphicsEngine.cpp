@@ -39,21 +39,21 @@ float seatHeight = 2.0f;
 float seatWidth = 3.0f;
 char passenger1Path[] = "Textures/Passenger1.png";
 
-Aircraft selectedAircraft;
-std::string aircraftName;
+Aircraft g_selectedAircraft;
+std::string g_aircraftName;
 
-vector<vector<vec2>> activeTemplate;
-vector<vector<vec2>> activeDoorPos;
-int noOfRows;
-int noOfColumns;
-vector<Passenger> activePassengers;
-vector<Passenger> activeSeatedPassengers;
-float aislePosY;
-vector<vec2> activeWallPos;
-std::string currentAlgorithm;
+vector<vector<vec2>> g_activeTemplate;
+vector<vector<vec2>> g_activeDoorPos;
+int g_noOfRows;
+int g_noOfColumns;
+vector<Passenger> g_activePassengers;
+vector<Passenger> g_activeSeatedPassengers;
+float g_aislePosY;
+vector<vec2> g_activeWallPos;
+std::string g_currentAlgorithm;
 
-PhysicsEngine PE;
-SeatingStrategies SS;
+PhysicsEngine g_PE;
+SeatingStrategies g_SS;
 
 
 void GraphicsEngine::init() {
@@ -71,33 +71,33 @@ void GraphicsEngine::init() {
 void GraphicsEngine::initSettings(int strategy, int layout) {
 
 	if (layout == 1) {
-		selectedAircraft = AirbusA319();
+		g_selectedAircraft = AirbusA319();
 	}
 	else {
-		selectedAircraft = Boeing737();
+		g_selectedAircraft = Boeing737();
 	}
 
-	aircraftName = selectedAircraft.getTemplateName();
-	activeTemplate = selectedAircraft.getTemplate();
-	activeDoorPos = selectedAircraft.getDoorPos();
-	noOfRows = selectedAircraft.getNoOfRows();
-	noOfColumns = selectedAircraft.getNoOfColumns();
-	activePassengers.clear();
-	activeSeatedPassengers.clear();
-	aislePosY = selectedAircraft.getAislePosY();
-	activeWallPos = selectedAircraft.getWallPos();
+	g_aircraftName = g_selectedAircraft.getTemplateName();
+	g_activeTemplate = g_selectedAircraft.getTemplate();
+	g_activeDoorPos = g_selectedAircraft.getDoorPos();
+	g_noOfRows = g_selectedAircraft.getNoOfRows();
+	g_noOfColumns = g_selectedAircraft.getNoOfColumns();
+	g_activePassengers.clear();
+	g_activeSeatedPassengers.clear();
+	g_aislePosY = g_selectedAircraft.getAislePosY();
+	g_activeWallPos = g_selectedAircraft.getWallPos();
 
 	if (strategy == 1) {
-		SS.backToFront(currentAlgorithm, noOfRows, activeTemplate, activeDoorPos, activePassengers);
+		g_SS.backToFront(g_currentAlgorithm, g_noOfRows, g_activeTemplate, g_activeDoorPos, g_activePassengers);
 	}
 	else if (strategy == 2) {
-		SS.seatBySeat(currentAlgorithm, noOfRows, noOfColumns, aircraftName, activeTemplate, activeDoorPos, activePassengers);
+		g_SS.seatBySeat(g_currentAlgorithm, g_noOfRows, g_noOfColumns, g_aircraftName, g_activeTemplate, g_activeDoorPos, g_activePassengers);
 	}
 	else if (strategy == 3) {
-		SS.randomSeat(currentAlgorithm, noOfRows, noOfColumns, aircraftName, activeTemplate, activeDoorPos, activePassengers);
+		g_SS.randomSeat(g_currentAlgorithm, g_noOfRows, g_noOfColumns, g_aircraftName, g_activeTemplate, g_activeDoorPos, g_activePassengers);
 	}
 	else {
-		SS.rowByRow(currentAlgorithm, noOfRows, activeTemplate, activeDoorPos, activePassengers);
+		g_SS.rowByRow(g_currentAlgorithm, g_noOfRows, g_activeTemplate, g_activeDoorPos, g_activePassengers);
 	}
 }
 
@@ -119,13 +119,13 @@ void GraphicsEngine::display() {
 	//Simulation
 	else {
 		//Passenger navigation
-		PE.updatePositions(activePassengers, activeSeatedPassengers, aislePosY);
+		g_PE.updatePositions(g_activePassengers, g_activeSeatedPassengers, g_aislePosY);
 
 		if (!isConsole) {
 			//Draws seats
-			for (int i = 0; i < noOfRows; i++) {
-				for (size_t j = 0; j < activeTemplate[i].size(); j++) {
-					DO.loadObject(Seat1, 90.0f, activeTemplate[i][j].x, activeTemplate[i][j].y, seatHeight, seatWidth, 1.0f, 0.2f, 0.8f, 0.2f);
+			for (int i = 0; i < g_noOfRows; i++) {
+				for (size_t j = 0; j < g_activeTemplate[i].size(); j++) {
+					DO.loadObject(Seat1, 90.0f, g_activeTemplate[i][j].x, g_activeTemplate[i][j].y, seatHeight, seatWidth, 1.0f, 0.2f, 0.8f, 0.2f);
 				}
 			}
 
@@ -133,46 +133,46 @@ void GraphicsEngine::display() {
 			glColor3f(0.5f, 0.5f, 0.5f);
 			glLineWidth(5.0f);
 			glBegin(GL_LINES);
-			for (size_t i = 0; i < activeWallPos.size() - 1; i += 2) {
-				glVertex2f(activeWallPos[i].x, activeWallPos[i].y);
-				glVertex2f(activeWallPos[i + 1].x, activeWallPos[i + 1].y);
+			for (size_t i = 0; i < g_activeWallPos.size() - 1; i += 2) {
+				glVertex2f(g_activeWallPos[i].x, g_activeWallPos[i].y);
+				glVertex2f(g_activeWallPos[i + 1].x, g_activeWallPos[i + 1].y);
 			}
 			glEnd();
 
 			//Draws seeking passengers
-			for (size_t i = 0; i < activePassengers.size(); i++) {
-				vec2 tempInitPos = activePassengers[i].getInitPos();
-				float tempRotation = activePassengers[i].getRotation();
+			for (size_t i = 0; i < g_activePassengers.size(); i++) {
+				vec2 tempInitPos = g_activePassengers[i].getInitPos();
+				float tempRotation = g_activePassengers[i].getRotation();
 				DO.loadObject(Passenger1, tempRotation, tempInitPos.x, tempInitPos.y, passengerHeight, passengerWidth, 1.0f, 1.0f, 1.0f, 1.0f);
 			}
 
 			//Draws seated passengerss
-			for (size_t i = 0; i < activeSeatedPassengers.size(); i++) {
-				vec2 tempInitPos = activeSeatedPassengers[i].getInitPos();
+			for (size_t i = 0; i < g_activeSeatedPassengers.size(); i++) {
+				vec2 tempInitPos = g_activeSeatedPassengers[i].getInitPos();
 				DO.loadObject(Passenger1, 90.0f, tempInitPos.x, tempInitPos.y, passengerHeight, passengerWidth, 1.0f, 1.0f, 1.0f, 1.0f);
 			}
 		}
 
 		//Runtime timing
-		if (!activePassengers.empty()) {
+		if (!g_activePassengers.empty()) {
 			double endTime = glutGet(GLUT_ELAPSED_TIME);
 			totalRuntime = (endTime - startTime) / 1000;
 		}
 
 		if (!isConsole) {
 			// Display the current algorithm to the window
-			infoDisplay("Boarding strategy: " + currentAlgorithm, -150.0f, -70.0f);
+			infoDisplay("Boarding strategy: " + g_currentAlgorithm, -150.0f, -70.0f);
 
 			// Display the current template name to the window
-			infoDisplay("Aircraft map: " + selectedAircraft.getTemplateName(), -150.0f, -75.0f);
+			infoDisplay("Aircraft map: " + g_selectedAircraft.getTemplateName(), -150.0f, -75.0f);
 
 			infoDisplay(runtimeResultText + std::to_string(totalRuntime), -150.0f, -80.0f);
 		}
 
-		if (activePassengers.empty() && !isBoarded) {
+		if (g_activePassengers.empty() && !isBoarded) {
 			isBoarded = true;
-			std::cout << "Boarding strategy strategy: " + currentAlgorithm << std::endl;
-			std::cout << "Aircraft map: " + selectedAircraft.getTemplateName() << std::endl;
+			std::cout << "Boarding strategy strategy: " + g_currentAlgorithm << std::endl;
+			std::cout << "Aircraft map: " + g_selectedAircraft.getTemplateName() << std::endl;
 			std::cout << runtimeResultText + std::to_string(totalRuntime) << std::endl;
 		}
 	}

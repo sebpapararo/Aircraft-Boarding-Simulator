@@ -339,7 +339,7 @@ void GraphicsEngine::runGraphicsEngine(int argc, char** argv) {
 
 	init();
 
-	std::cout << "\nStarting the simulation!" << std::endl;
+	std::cout << "\nRunning the simulation..." << std::endl;
 	glutDisplayFunc(display);							// Register display callback handler for window re-paint
 	glutMainLoop();
 }

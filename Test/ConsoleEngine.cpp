@@ -20,12 +20,12 @@ void ConsoleEngine::init() {
 	// Ask the user which plane template they want to use
 	int planeChoice;
 	std::cout << "\nWhich plane template would you like to use? Airbus A319 (1) or Boeing 737-800 (2)." << std::endl;
-	std::cout << "Please enter the number corresponding to your choice: ";
+	std::cout << "Enter the number corresponding to your choice: ";
 	std::cin >> planeChoice;
 
 	// Let the user try again if entered an invalid number
 	while (planeChoice != 1 && planeChoice != 2) {
-		std::cout << "Sorry, invalid number. Please enter '1' for the Airbus A319 or '2' for the Boeing 737-800: ";
+		std::cout << "Invalid number. Please enter '1' for the Airbus A319 or '2' for the Boeing 737-800: ";
 		std::cin >> planeChoice;
 	}
 
@@ -53,12 +53,12 @@ void ConsoleEngine::init() {
 	int algorithmChoice;
 	std::cout << "\nWhich boarding strategy would you like to use?" << std::endl;
 	std::cout << "back-to-front (1), seat-by-seat (2), row-by-row (3) or random-seat (4)" << std::endl;
-	std::cout << "Please enter the number corresponding to your choice: ";
+	std::cout << "Enter the number corresponding to your choice: ";
 	std::cin >> algorithmChoice;
 
 	// Let the user try again if entered an invalid number
 	while (algorithmChoice != 1 && algorithmChoice != 2 && algorithmChoice != 3 && algorithmChoice != 4) {
-		std::cout << "Sorry, invalid number. Please enter '1' for back-to-front, '2' for seat-by-seat, '3' for row-by-row or '4' for random-seat: ";
+		std::cout << "Invalid number. Please enter '1' for back-to-front, '2' for seat-by-seat, '3' for row-by-row or '4' for random-seat: ";
 		std::cin >> algorithmChoice;
 	}
 
@@ -84,7 +84,7 @@ void ConsoleEngine::runConsoleEngine() {
 	// Initialise everything needed for the simulation
 	init();
 
-	std::cout << "\nStarting the simulation!" << std::endl;
+	std::cout << "\nRunning the simulation!..." << std::endl;
 	int logicCycles = 0;
 	clock_t startTimer = clock();
 	
@@ -94,8 +94,8 @@ void ConsoleEngine::runConsoleEngine() {
 	}
 		
 	clock_t totalRuntime = clock();
-	std::cout << "All passengers are now seated!" << std::endl;
+	std::cout << "All passengers are seated." << std::endl;
 	std::cout << "The algorithm used was: '" << c_currentAlgorithm << "' and the plane template was: '" << c_aircraftName << "'" << std::endl;
-	std::cout << "Everyone is now seated! The total runtime was (seconds): " << totalRuntime / (double)CLOCKS_PER_SEC << std::endl;
-	std::cout << "Everyone is now seated! The total runtime was (logic cycles): " << logicCycles << std::endl;
+	std::cout << "Everyone is seated. The total runtime was (in seconds): " << totalRuntime / (double)CLOCKS_PER_SEC << std::endl;
+	std::cout << "Everyone is seated. The total runtime was (in logic cycles): " << logicCycles << std::endl;
 }

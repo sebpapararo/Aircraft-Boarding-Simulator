@@ -6,7 +6,7 @@ void SeatingStrategies::backToFront(std::string &currentAlgorithm, int noOfRows,
 	int count = 0;
 	for (int i = 0; i < noOfRows; i++) {
 		for (size_t j = 0; j < activeTemplate[i].size(); j++) {
-			Passenger *p = new Passenger(activeTemplate[i][j], activeDoorPos[1][1] + vec2(0.0f, (-10.0f * count)));	//Sets seat and starting positions
+			Passenger *p = new Passenger(activeTemplate[i][j], activeDoorPos[1][1] + vec2(0.0f, (-10.0f * count)), false);	//Sets seat and starting positions
 			activePassengers.push_back(*p);
 			count++;
 		}
@@ -23,7 +23,7 @@ void SeatingStrategies::seatBySeat(std::string &currentAlgorithm, int noOfRows, 
 			if (aircraftName == "Boeing 737-800" && j == 0 && (i == 3 || i == 4 || i == 5)) {
 				continue;
 			}
-			Passenger* p = new Passenger(activeTemplate[j][i], activeDoorPos[1][1] + vec2(0.0f, (-20.0f * count)));	//Sets seat and starting positions
+			Passenger* p = new Passenger(activeTemplate[j][i], activeDoorPos[1][1] + vec2(0.0f, (-10.0f * count)), false);	//Sets seat and starting positions
 			activePassengers.push_back(*p);
 			count++;
 		}
@@ -35,7 +35,7 @@ void SeatingStrategies::rowByRow(std::string &currentAlgorithm, int noOfRows, ve
 	int count = 0;
 	for (int i = 0; i < noOfRows; i++) {
 		for (size_t j = 0; j < activeTemplate[i].size(); j++) {
-			Passenger* p = new Passenger(activeTemplate[i][j], activeDoorPos[1][1] + vec2(0.0f, (-20.0f * count)));	//Sets seat and starting positions
+			Passenger* p = new Passenger(activeTemplate[i][j], activeDoorPos[1][1] + vec2(0.0f, (-10.0f * count)), false);	//Sets seat and starting positions
 			activePassengers.push_back(*p);
 			count++;
 		}
@@ -44,7 +44,8 @@ void SeatingStrategies::rowByRow(std::string &currentAlgorithm, int noOfRows, ve
 
 void SeatingStrategies::randomSeat(std::string &currentAlgorithm, int noOfRows, int noOfColumns, std::string aircraftName, vector<vector<vec2>> activeTemplate, vector<vector<vec2>> activeDoorPos, vector<Passenger> &activePassengers) {
 	currentAlgorithm = "Random";
-	int count = 0;
+	int count1 = 0;
+	int count2 = 0;
 	vector<int> numbers;
 	int noOfSeats = noOfRows * noOfColumns;
 
@@ -61,8 +62,18 @@ void SeatingStrategies::randomSeat(std::string &currentAlgorithm, int noOfRows, 
 		if (aircraftName == "Boeing 737-800" && numbers[i] / noOfColumns == 0 && (numbers[i] % noOfColumns == 3 || numbers[i] % noOfColumns == 4 || numbers[i] % noOfColumns == 5)) {
 			continue;
 		}
-		Passenger *p = new Passenger(activeTemplate[numbers[i] / noOfColumns][numbers[i] % noOfColumns], activeDoorPos[1][1] + vec2(0.0f, (-20.0f * count)));	//Sets seat and starting positions
+
+		Passenger *p;
+
+		if (rand() % 2 == 0) {
+			p = new Passenger(activeTemplate[numbers[i] / noOfColumns][numbers[i] % noOfColumns], activeDoorPos[1][1] + vec2(0.0f, (-10.0f * count1)), false);	//Passengers enter through right door
+			count1++;
+		}
+		else {
+			p = new Passenger(activeTemplate[numbers[i] / noOfColumns][numbers[i] % noOfColumns], activeDoorPos[0][1] + vec2(0.0f, (-10.0f * count2)), true);	//Passengers enter through left door
+			count2++;
+		}
+
 		activePassengers.push_back(*p);
-		count++;
 	}
 }

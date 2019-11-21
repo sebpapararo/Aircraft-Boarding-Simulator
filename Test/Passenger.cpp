@@ -1,8 +1,9 @@
 #include "Passenger.h"
 
-Passenger::Passenger(vec2 pos, vec2 init) {
+Passenger::Passenger(vec2 pos, vec2 init, bool isRight) {
 	seatPos = pos;
 	initPos = init;
+	isWalkingRight = isRight;
 }
 
 vec2 Passenger::getSeatPos() const {
@@ -26,6 +27,14 @@ float Passenger::getWalkingSpeed() const {
 
 void Passenger::setWalkingSpeed(float speed) {
 	walkingSpeed = speed;
+}
+
+bool Passenger::getIsWalkingRight() const {
+	return isWalkingRight;
+}
+
+void Passenger::setIsWalkingRight(bool isRight) {
+	isWalkingRight = isRight;
 }
 
 bool Passenger::getIsAligned() const {

@@ -14,8 +14,8 @@ public:
 	void setWalkingSpeed(float speed);
 	bool getIsWalkingRight() const;
 	void setIsWalkingRight(bool isRight);
-	bool getIsAligned() const;
-	void setIsAligned(bool isLinedUp);
+	bool getIsYAlignedWithAisle() const;
+	void setIsYAlignedWithAisle(bool isLinedUp);
 	bool getIsRowFound() const;
 	void setIsRowFound(bool isFound);
 	float getBaggageTimerStart() const;
@@ -27,7 +27,7 @@ private:
 	vec2 seatPos;
 	vec2 initPos;
 	float walkingSpeed = 1.0f;
-	bool isAligned = false;
+	bool isYAlignedWithAisle = false;
 	bool isRowFound = false;
 	float baggageTimerStart;
 	bool isWalkingRight;

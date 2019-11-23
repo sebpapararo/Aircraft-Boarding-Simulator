@@ -264,7 +264,7 @@ void GraphicsEngine::processSpecialKeys(int key, int x, int y) {
 			else {
 				menuSelect++;
 				setStrategyText = "Set boarding strategy: ";
-				setMapText = "->> Set aircraft map: ";
+				setMapText = "--> Set aircraft map: ";
 			}
 		}
 		else if (key == GLUT_KEY_DOWN) {

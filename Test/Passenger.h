@@ -24,7 +24,7 @@ public:
 private:
 	vec2 seatPos;
 	vec2 initPos;
-	float walkingSpeed = 1.0f;
+	float walkingSpeed = 10.0f;
 	bool isAligned = false;
 	bool isRowFound = false;
 	float baggageTimerStart;

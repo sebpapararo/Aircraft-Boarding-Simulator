@@ -1,10 +1,47 @@
 #include "PhysicsEngine.h"
 
+#include <chrono>
+
+// Defining types
+typedef std::chrono::high_resolution_clock Time;
+typedef std::chrono::milliseconds ms;
+typedef std::chrono::duration<float> fsec;
+
+float ticksPerSecond = 100;
+
+auto lastDelta = Time::now();
+auto currentDelta = Time::now();
+bool firstLoop = true;
+
 void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<Passenger> &activeSeatedPassengers, float aislePosY) {
+
+	if (firstLoop) {
+		currentDelta = Time::now();
+		firstLoop = false;
+		// on first iteration only initialise delta time
+		return;
+	}
+
+	// calculating deltaTime
+	lastDelta = currentDelta;
+	currentDelta = Time::now();
+	fsec ds = currentDelta - lastDelta;
+
+	// conerting deltaTime into a float (should be somewhere around 0.02 ~)
+	float floatDt = ds.count();
+
+	// If no time has passed since last iteration, dont move anything.
+	if (ds.count() == 0) {
+		std::cout << " NO TIME PASSED" << std::endl;
+		return;
+	}
+
 	//Updates positions and draws passengers
+	// For each passenger: 
 	for (size_t i = 0; i < activePassengers.size(); i++) {
+		// Initialising passanger information
 		vec2 tempInitPos = activePassengers[i].getInitPos();
-		float tempSpeed = activePassengers[i].getWalkingSpeed();
+		float tempSpeed = (activePassengers[i].getWalkingSpeed() * floatDt);
 		float distanceCD = passengerRadius + tempSpeed;
 		bool tempIsAligned = activePassengers[i].getIsAligned();
 

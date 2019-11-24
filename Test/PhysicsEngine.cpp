@@ -7,8 +7,6 @@ typedef std::chrono::high_resolution_clock Time;
 typedef std::chrono::milliseconds ms;
 typedef std::chrono::duration<float> fsec;
 
-float ticksPerSecond = 100;
-
 auto lastDelta = Time::now();
 auto currentDelta = Time::now();
 bool firstLoop = true;

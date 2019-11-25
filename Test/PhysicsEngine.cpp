@@ -42,7 +42,8 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 		vec2 tempInitPos = activePassengers[i].getInitPos();
 		float tempSpeed = (activePassengers[i].getWalkingSpeed() * doubleDt);
 		float distanceCD = passengerRadius + tempSpeed;
-		bool tempIsAligned = activePassengers[i].getIsAligned();
+		bool tempIsAisleAligned = activePassengers[i].getIsYAlignedWithAisle();
+		bool tempIsWalkingRight = activePassengers[i].getIsWalkingRight();
 
 		//If passenger is seated, move passenger to activeSeatedPassengers vector and move on to next passenger
 		if (tempInitPos == activePassengers[i].getSeatPos()) {
@@ -53,18 +54,17 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 
 		// ================== Movement Logic ==================
 
+		//If aligned with the aisle, set to true
+		if (tempInitPos.y == aislePosY) {
+			activePassengers[i].setIsYAlignedWithAisle(true);
+		}
+
 		// TODO: collision detection needs some work, because there position is calculated before checks for overshooting
 		//		 happen, collisions may be detected even when they will not occur!
 
-
-		//Logic to line up passengers with the aisle
-
-		// if the passenger has not been alligned with its aisle yet:
-		if (!activePassengers[i].getIsAligned()) {
-
-			// if the passenger is below its aisle, walk up
-			if (tempInitPos.y < aislePosY) {	
-
+		//Lines up passengers with the aisle
+		if (!tempIsAisleAligned) {
+			if (tempInitPos.y < aislePosY) {											//If below aisle, walk up
 				vec2 newPos = tempInitPos + vec2(0.0f, tempSpeed);
 
 				if (tempInitPos.y + distanceCD < aislePosY) {
@@ -123,15 +123,29 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 			}
 		}
 
-		//Logic to move passengers in their seats
-		else {
-			if (tempInitPos.x < activePassengers[i].getSeatPos().x) { //If to the left of the row, walk right
+
+		//Moves passengers to their seat row
+		else if (!activePassengers[i].getIsRowFound()) {
+			if ((tempInitPos.x + 2.0f) < activePassengers[i].getSeatPos().x) { //If to the left of the row, walk right
 				vec2 newPos = tempInitPos + vec2(tempSpeed, 0.0f);
 				for (size_t j = 0; j < activePassengers.size(); j++) {	//Collision detection
-					if (abs(newPos.x - activePassengers[j].getInitPos().x) < distanceCD && abs(newPos.y - activePassengers[j].getInitPos().y) < distanceCD && activePassengers[j].getInitPos().x != tempInitPos.x) {
-						newPos -= vec2(tempSpeed, 0.0f);
-						break;
+
+					if (abs(newPos.x - activePassengers[j].getInitPos().x) < distanceCD &&
+						activePassengers[j].getIsYAlignedWithAisle() &&
+						i != j) {
+						if (tempIsWalkingRight != activePassengers[j].getIsWalkingRight() && 
+							!activePassengers[j].getIsRowFound()) {
+							newPos = tempInitPos + vec2(tempSpeed / 4, 0.0f);
+							break;
+						}
+						else if (tempInitPos.x > activePassengers[j].getInitPos().x) {
+							vec2 newPos = tempInitPos + vec2(tempSpeed, 0.0f);
+						}
+						else {
+							newPos = tempInitPos;
+						}
 					}
+
 				}
 				// if the passenger has overshot the row, line him up on the row!
 				if (newPos.x >= activePassengers[i].getSeatPos().x) {
@@ -142,13 +156,26 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 				}
 				activePassengers[i].setRotation(270.0f);
 			}
-			else if (tempInitPos.x > activePassengers[i].getSeatPos().x) {	//If to the right of the row, walk left
+			else if ((tempInitPos.x - 2.0f) > activePassengers[i].getSeatPos().x) {	//If to the right of the row, walk left
 				vec2 newPos = tempInitPos + vec2(-tempSpeed, 0.0f);
 				for (size_t j = 0; j < activePassengers.size(); j++) {	//Collision detection
-					if (abs(newPos.x - activePassengers[j].getInitPos().x) < distanceCD && abs(newPos.y - activePassengers[j].getInitPos().y) < distanceCD && activePassengers[j].getInitPos().x != tempInitPos.x) {
-						newPos -= vec2(-tempSpeed, 0.0f);
-						break;
+
+					if (abs(newPos.x - activePassengers[j].getInitPos().x) < distanceCD &&
+						activePassengers[j].getIsYAlignedWithAisle() &&
+						i != j) {
+						if (tempIsWalkingRight != activePassengers[j].getIsWalkingRight() && 
+							!activePassengers[j].getIsRowFound()) {
+							newPos = tempInitPos + vec2(-tempSpeed / 4, 0.0f);
+							break;
+						}
+						else if (tempInitPos.x < activePassengers[j].getInitPos().x) {
+							vec2 newPos = tempInitPos + vec2(-tempSpeed, 0.0f);
+						}
+						else {
+							newPos = tempInitPos;
+						}
 					}
+
 				}
 				// if the passenger has overshot the row, line him up on the row!
 				if (newPos.x <= activePassengers[i].getSeatPos().x) {
@@ -159,6 +186,9 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 				}
 				activePassengers[i].setRotation(90.0f);
 			}
+			else {
+				activePassengers[i].setInitPos(vec2(activePassengers[i].getSeatPos().x, tempInitPos.y));
+				activePassengers[i].setIsRowFound(true);
 
 			// TODO: move this outside into seperate elseif 
 
@@ -195,6 +225,22 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 					}
 					activePassengers[i].setRotation(180.0f);
 				}
+			}
+		}
+		else {	//When row found, walk up or down to get in the seat
+			if (activePassengers[i].getBaggageTimerStart() < 0) {	//Sets timer when passenger starts to enter the seat row
+				activePassengers[i].setBaggageTimerStart(glutGet(GLUT_ELAPSED_TIME));
+			}
+			else if ((glutGet(GLUT_ELAPSED_TIME) - activePassengers[i].getBaggageTimerStart()) < 1000) {	//If passenger waits less than one second
+				//Do nothing
+			}
+			else if (tempInitPos.y < activePassengers[i].getSeatPos().y) {
+				activePassengers[i].setInitPos(tempInitPos + vec2(0.0f, tempSpeed));
+				activePassengers[i].setRotation(0.0f);
+			}
+			else if (tempInitPos.y > activePassengers[i].getSeatPos().y) {
+				activePassengers[i].setInitPos(tempInitPos + vec2(0.0f, -tempSpeed));
+				activePassengers[i].setRotation(180.0f);
 			}
 		}
 	}

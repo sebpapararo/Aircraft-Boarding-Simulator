@@ -1,8 +1,9 @@
 #include "Passenger.h"
 
-Passenger::Passenger(vec2 pos, vec2 init) {
+Passenger::Passenger(vec2 pos, vec2 init, bool isRight) {
 	seatPos = pos;
 	initPos = init;
+	isWalkingRight = isRight;
 }
 
 vec2 Passenger::getSeatPos() const {
@@ -15,7 +16,6 @@ void Passenger::setSeatPos(vec2 pos){
 vec2 Passenger::getInitPos() const {
 	return initPos;
 }
-
 void Passenger::setInitPos(vec2 init) {
 	initPos = init;
 }
@@ -23,23 +23,27 @@ void Passenger::setInitPos(vec2 init) {
 float Passenger::getWalkingSpeed() const {
 	return walkingSpeed;
 }
-
 void Passenger::setWalkingSpeed(float speed) {
 	walkingSpeed = speed;
 }
 
-bool Passenger::getIsAligned() const {
-	return isAligned;
+bool Passenger::getIsWalkingRight() const {
+	return isWalkingRight;
+}
+void Passenger::setIsWalkingRight(bool isRight) {
+	isWalkingRight = isRight;
 }
 
-void Passenger::setIsAligned(bool isLinedUp) {
-	isAligned = isLinedUp;
+bool Passenger::getIsYAlignedWithAisle() const {
+	return isYAlignedWithAisle;
+}
+void Passenger::setIsYAlignedWithAisle(bool isLinedUp) {
+	isYAlignedWithAisle = isLinedUp;
 }
 
 bool Passenger::getIsRowFound() const {
 	return isRowFound;
 }
-
 void Passenger::setIsRowFound(bool isFound) {
 	isRowFound = isFound;
 }
@@ -47,7 +51,6 @@ void Passenger::setIsRowFound(bool isFound) {
 float Passenger::getBaggageTimerStart() const {
 	return baggageTimerStart;
 }
-
 void Passenger::setBaggageTimerStart(float time) {
 	baggageTimerStart = time;
 }
@@ -55,7 +58,6 @@ void Passenger::setBaggageTimerStart(float time) {
 float Passenger::getRotation() const {
 	return rotation;
 }
-
 void Passenger::setRotation(float newRotation) {
 	rotation = newRotation;
 }

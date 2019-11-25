@@ -4,6 +4,8 @@
 #include <chrono>
 #include <random>
 #include <vector>
+#include <algorithm>
+
 using std::vector;
 
 class SeatingStrategies {

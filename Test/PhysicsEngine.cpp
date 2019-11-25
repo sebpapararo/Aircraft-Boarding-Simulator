@@ -85,7 +85,7 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 				// if the passenger has overshot the aisle, line him up on the aisle! TODO: move passengers who have overshot the aisle, into the aisle the distance they overshot!
 				if (tempInitPos.y + distanceCD >= aislePosY) {
 					activePassengers[i].setInitPos(vec2(tempInitPos.x, aislePosY));
-					activePassengers[i].setIsAligned(true);
+					activePassengers[i].setIsYAlignedWithAisle(true);
 				}
 				else {
 					activePassengers[i].setInitPos(newPos);
@@ -114,7 +114,7 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 				// if the passenger has overshot the aisle, line him up on the aisle!
 				if (tempInitPos.y + distanceCD <= aislePosY) {
 					activePassengers[i].setInitPos(vec2(tempInitPos.x, aislePosY));
-					activePassengers[i].setIsAligned(true);
+					activePassengers[i].setIsYAlignedWithAisle(true);
 				}
 				else {
 					activePassengers[i].setInitPos(newPos);
@@ -122,10 +122,9 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 				activePassengers[i].setRotation(180.0f);
 			}
 		}
-
-
 		//Moves passengers to their seat row
 		else if (!activePassengers[i].getIsRowFound()) {
+			
 			if ((tempInitPos.x + 2.0f) < activePassengers[i].getSeatPos().x) { //If to the left of the row, walk right
 				vec2 newPos = tempInitPos + vec2(tempSpeed, 0.0f);
 				for (size_t j = 0; j < activePassengers.size(); j++) {	//Collision detection
@@ -186,60 +185,53 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 				}
 				activePassengers[i].setRotation(90.0f);
 			}
+			// if passenger is neither to the left or right of the row, he haf found it, setting rowFound to true!
 			else {
 				activePassengers[i].setInitPos(vec2(activePassengers[i].getSeatPos().x, tempInitPos.y));
 				activePassengers[i].setIsRowFound(true);
 
 			// TODO: move this outside into seperate elseif 
 
-			else {	//When row found, walk up or down to get in the seat
 				if (activePassengers[i].getBaggageTimerStart() < 0) {	//Sets timer when passenger starts to enter the seat row
 					activePassengers[i].setIsRowFound(true);
 					activePassengers[i].setBaggageTimerStart(glutGet(GLUT_ELAPSED_TIME)); // TODO: implement system time, instead of 'GLUT time'
 				}
-				else if ((glutGet(GLUT_ELAPSED_TIME) - activePassengers[i].getBaggageTimerStart()) < 1000) {	//If passenger waits less than one second
-					//Do nothing
-				}
-				// else if the passenger is below its seat, walk up
-				else if (tempInitPos.y < activePassengers[i].getSeatPos().y) {
-					vec2 tempPos = tempInitPos + vec2(0.0f, tempSpeed);
-
-					// if the passenger has overshot the seat, line him up on the seat!
-					if (tempPos.y >= activePassengers[i].getSeatPos().y) {
-						activePassengers[i].setInitPos(vec2(tempPos.x, activePassengers[i].getSeatPos().y));
-					}
-					else {
-						activePassengers[i].setInitPos(tempInitPos + vec2(0.0f, tempSpeed));
-					}
-					activePassengers[i].setRotation(0.0f);
-				}
-				else if (tempInitPos.y > activePassengers[i].getSeatPos().y) {
-					vec2 tempPos = tempInitPos + vec2(0.0f, -tempSpeed);
-
-					// if the passenger has overshot the seat, line him up on the seat!
-					if (tempPos.y <= activePassengers[i].getSeatPos().y) {
-						activePassengers[i].setInitPos(vec2(tempPos.x, activePassengers[i].getSeatPos().y));
-					}
-					else {
-						activePassengers[i].setInitPos(tempInitPos + vec2(0.0f, -tempSpeed));
-					}
-					activePassengers[i].setRotation(180.0f);
-				}
 			}
 		}
-		else {	//When row found, walk up or down to get in the seat
+		//When row found, walk up or down to get in the seat
+		else {	
+			vec2 tempPos = tempInitPos + vec2(0.0f, tempSpeed);
 			if (activePassengers[i].getBaggageTimerStart() < 0) {	//Sets timer when passenger starts to enter the seat row
 				activePassengers[i].setBaggageTimerStart(glutGet(GLUT_ELAPSED_TIME));
 			}
 			else if ((glutGet(GLUT_ELAPSED_TIME) - activePassengers[i].getBaggageTimerStart()) < 1000) {	//If passenger waits less than one second
 				//Do nothing
 			}
+
+			// else if the passenger is below its seat, walk up
 			else if (tempInitPos.y < activePassengers[i].getSeatPos().y) {
-				activePassengers[i].setInitPos(tempInitPos + vec2(0.0f, tempSpeed));
+				vec2 tempPos = tempInitPos + vec2(0.0f, tempSpeed);
+
+				// if the passenger has overshot the seat, line him up on the seat!
+				if (tempPos.y >= activePassengers[i].getSeatPos().y) {
+					activePassengers[i].setInitPos(vec2(tempPos.x, activePassengers[i].getSeatPos().y));
+				}
+				else {
+					activePassengers[i].setInitPos(tempInitPos + vec2(0.0f, tempSpeed));
+				}
 				activePassengers[i].setRotation(0.0f);
 			}
+			// else if the passenger is above its seat, walk down 
 			else if (tempInitPos.y > activePassengers[i].getSeatPos().y) {
-				activePassengers[i].setInitPos(tempInitPos + vec2(0.0f, -tempSpeed));
+				vec2 tempPos = tempInitPos + vec2(0.0f, -tempSpeed);
+
+				// if the passenger has overshot the seat, line him up on the seat!
+				if (tempPos.y <= activePassengers[i].getSeatPos().y) {
+					activePassengers[i].setInitPos(vec2(tempPos.x, activePassengers[i].getSeatPos().y));
+				}
+				else {
+					activePassengers[i].setInitPos(tempInitPos + vec2(0.0f, -tempSpeed));
+				}
 				activePassengers[i].setRotation(180.0f);
 			}
 		}

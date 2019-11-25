@@ -25,8 +25,8 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 	currentDelta = Time::now();
 	fsec ds = currentDelta - lastDelta;
 
-	// conerting deltaTime into a float (should be somewhere around 0.02 ~)
-	double floatDt = ds.count();
+	// conerting deltaTime into a double (should be somewhere around 0.02 ~)
+	double doubleDt = ds.count();
 
 	// If no time has passed since last iteration, dont move anything.
 	if (ds.count() == 0) {
@@ -40,7 +40,7 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 
 		// Initialising passanger information
 		vec2 tempInitPos = activePassengers[i].getInitPos();
-		float tempSpeed = (activePassengers[i].getWalkingSpeed() * floatDt);
+		float tempSpeed = (activePassengers[i].getWalkingSpeed() * doubleDt);
 		float distanceCD = passengerRadius + tempSpeed;
 		bool tempIsAligned = activePassengers[i].getIsAligned();
 

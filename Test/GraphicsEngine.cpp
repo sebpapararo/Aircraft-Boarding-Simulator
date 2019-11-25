@@ -1,5 +1,7 @@
 #include "GraphicsEngine.h"
 
+int zoom = 0;
+
 int window = 0;
 bool isConsole = false;
 bool isBoarded = false;
@@ -103,6 +105,8 @@ void GraphicsEngine::initSettings(int strategy, int layout) {
 
 
 void GraphicsEngine::display() {
+	reshape(screenWidth, screenHeight);
+
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	FPSLock(FPSCap);
@@ -171,7 +175,7 @@ void GraphicsEngine::display() {
 
 		if (g_activePassengers.empty() && !isBoarded) {
 			isBoarded = true;
-			std::cout << "Boarding strategy strategy: " + g_currentAlgorithm << std::endl;
+			std::cout << "Boarding strategy: " + g_currentAlgorithm << std::endl;
 			std::cout << "Aircraft map: " + g_selectedAircraft.getTemplateName() << std::endl;
 			std::cout << runtimeResultText + std::to_string(totalRuntime) << std::endl;
 		}
@@ -250,6 +254,13 @@ void GraphicsEngine::processKeys(unsigned char key, int x, int y) {	//Takes keyb
 			isStarted = false;
 		}
 	}
+
+	if (key == '-') {
+		zoom++;
+	}
+	if (key == '+') {
+		zoom--;
+	}
 	
 }
 
@@ -324,7 +335,7 @@ void GraphicsEngine::reshape(int width, int height) {		// Resize the OpenGL wind
 	glMatrixMode(GL_PROJECTION);							// Select The Projection Matrix
 	glLoadIdentity();										// Reset The Projection Matrix
 	aspect = (float)width / (float)height;
-	gluOrtho2D(-100 * aspect, 100 * aspect, -100, 100);		//Adjusts aspect ratio
+	gluOrtho2D((-100 - zoom) * aspect, (100 + zoom) * aspect, -100 - zoom, 100 + zoom);		//Adjusts aspect ratio
 
 	glMatrixMode(GL_MODELVIEW);								// Select The Modelview Matrix
 	glLoadIdentity();										// Reset The Modelview Matrix

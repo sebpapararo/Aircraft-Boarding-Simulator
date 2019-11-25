@@ -26,7 +26,7 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 	fsec ds = currentDelta - lastDelta;
 
 	// conerting deltaTime into a float (should be somewhere around 0.02 ~)
-	float floatDt = ds.count();
+	double floatDt = ds.count();
 
 	// If no time has passed since last iteration, dont move anything.
 	if (ds.count() == 0) {

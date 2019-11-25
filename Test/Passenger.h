@@ -26,7 +26,8 @@ public:
 private:
 	vec2 seatPos;
 	vec2 initPos;
-	float walkingSpeed = 1.0f;
+	// 12 is equivalent to 1 meter per second
+	float walkingSpeed = 12.0f;
 	bool isYAlignedWithAisle = false;
 	bool isRowFound = false;
 	float baggageTimerStart;

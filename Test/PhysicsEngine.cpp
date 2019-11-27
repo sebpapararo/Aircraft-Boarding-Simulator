@@ -11,6 +11,22 @@ auto lastDelta = Time::now();
 auto currentDelta = Time::now();
 bool firstLoop = true;
 
+void PhysicsEngine::seatedPassengerPercentage(vector<Passenger> &activeSeatedPassengers, int noOfPassengers) {
+	if (activeSeatedPassengers.size() == (int)(noOfPassengers * 0.2)) {
+		std::cout << "20% of passengers are now seated!" << std::endl;
+	}
+	else if (activeSeatedPassengers.size() == (int)(noOfPassengers * 0.4)) {
+		std::cout << "40% of passengers are now seated!" << std::endl;
+	}
+	else if (activeSeatedPassengers.size() == (int)(noOfPassengers * 0.6)) {
+		std::cout << "60% of passengers are now seated!" << std::endl;
+	}
+	else if (activeSeatedPassengers.size() == (int)(noOfPassengers * 0.8)) {
+		std::cout << "80% of passengers are now seated!" << std::endl;
+	}
+}
+
+
 void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<Passenger> &activeSeatedPassengers, float aislePosY) {
 
 	if (firstLoop) {
@@ -25,7 +41,7 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 	currentDelta = Time::now();
 	fsec ds = currentDelta - lastDelta;
 
-	// conerting deltaTime into a double (should be somewhere around 0.02 ~)
+	// Convert deltaTime into a double (should be somewhere around 0.02 ~)
 	double doubleDt = ds.count();
 
 	// If no time has passed since last iteration, dont move anything.
@@ -35,10 +51,15 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 	}
 
 
+	int noOfPassengers = activePassengers.size() + activeSeatedPassengers.size();
+	if (noOfPassengers % 2 != 0) {				// Adds 1 to make it even number, so it is easier to calculate %
+		noOfPassengers++;
+	}
+
 	// For each passenger: 
 	for (size_t i = 0; i < activePassengers.size(); i++) {
 
-		// Initialising passanger information
+		// Initialising passenger information
 		vec2 tempInitPos = activePassengers[i].getInitPos();
 		float tempSpeed = (activePassengers[i].getWalkingSpeed() * doubleDt);
 		float distanceCD = passengerRadius + tempSpeed;
@@ -49,6 +70,7 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 		if (tempInitPos == activePassengers[i].getSeatPos()) {
 			activeSeatedPassengers.push_back(activePassengers[i]);
 			activePassengers.erase(activePassengers.begin() + i);
+			seatedPassengerPercentage(activeSeatedPassengers, noOfPassengers);
 			continue;
 		}
 

@@ -12,16 +12,16 @@ auto currentDelta = Time::now();
 bool firstLoop = true;
 
 void PhysicsEngine::seatedPassengerPercentage(vector<Passenger> &activeSeatedPassengers, int noOfPassengers) {
-	if (activeSeatedPassengers.size() == (int)(noOfPassengers * 0.2)) {
+	if (activeSeatedPassengers.size() == static_cast<int>(noOfPassengers * 0.2)) {
 		std::cout << "20% of passengers are now seated!" << std::endl;
 	}
-	else if (activeSeatedPassengers.size() == (int)(noOfPassengers * 0.4)) {
+	else if (activeSeatedPassengers.size() == static_cast<int>(noOfPassengers * 0.4)) {
 		std::cout << "40% of passengers are now seated!" << std::endl;
 	}
-	else if (activeSeatedPassengers.size() == (int)(noOfPassengers * 0.6)) {
+	else if (activeSeatedPassengers.size() == static_cast<int>(noOfPassengers * 0.6)) {
 		std::cout << "60% of passengers are now seated!" << std::endl;
 	}
-	else if (activeSeatedPassengers.size() == (int)(noOfPassengers * 0.8)) {
+	else if (activeSeatedPassengers.size() == static_cast<int>(noOfPassengers * 0.8)) {
 		std::cout << "80% of passengers are now seated!" << std::endl;
 	}
 }

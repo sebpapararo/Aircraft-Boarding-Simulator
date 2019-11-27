@@ -29,7 +29,7 @@ int FPSCap = 60;
 float FPS = 0.0f;
 double startTime;
 double totalRuntime;
-const char* runtimeResultText = "Total runtime (in seconds): ";
+const char* runtimeResultText = "Simulation runtime (in seconds): ";
 
 //Texture/shape parameters
 DrawObjects DO;
@@ -160,8 +160,9 @@ void GraphicsEngine::display() {
 		//Runtime timing
 		if (!g_activePassengers.empty()) {
 			double endTime = glutGet(GLUT_ELAPSED_TIME);
-			totalRuntime = (endTime - startTime) / 1000;
-		}
+			PhysicsEngine PE;
+			totalRuntime = ((endTime - startTime) / 1000) * PE.getSimSpeed();
+		} 
 
 		if (!isConsole) {
 			// Display the current algorithm to the window

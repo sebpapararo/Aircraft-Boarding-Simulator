@@ -11,6 +11,16 @@ auto lastDelta = Time::now();
 auto currentDelta = Time::now();
 bool firstLoop = true;
 
+
+double PhysicsEngine::getSimSpeed() {
+	return simSpeed;
+}
+
+void PhysicsEngine::setSimSpeed(double speed) {
+	simSpeed = speed;
+}
+
+
 void PhysicsEngine::seatedPassengerPercentage(vector<Passenger> &activeSeatedPassengers, int noOfPassengers) {
 	if (activeSeatedPassengers.size() == static_cast<int>(noOfPassengers * 0.2)) {
 		std::cout << "20% of passengers are now seated!" << std::endl;
@@ -61,7 +71,7 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 
 		// Initialising passenger information
 		vec2 tempInitPos = activePassengers[i].getInitPos();
-		float tempSpeed = (activePassengers[i].getWalkingSpeed() * doubleDt);
+		float tempSpeed = activePassengers[i].getWalkingSpeed() * doubleDt * simSpeed;
 		float distanceCD = passengerRadius + tempSpeed;
 		bool tempIsAisleAligned = activePassengers[i].getIsYAlignedWithAisle();
 		bool tempIsWalkingRight = activePassengers[i].getIsWalkingRight();
@@ -212,7 +222,7 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 				activePassengers[i].setInitPos(vec2(activePassengers[i].getSeatPos().x, tempInitPos.y));
 				activePassengers[i].setIsRowFound(true);
 
-			// TODO: move this outside into seperate elseif 
+			// TODO: move this outside into separate elseif 
 
 				if (activePassengers[i].getBaggageTimerStart() < 0) {	//Sets timer when passenger starts to enter the seat row
 					activePassengers[i].setIsRowFound(true);
@@ -226,7 +236,7 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 			if (activePassengers[i].getBaggageTimerStart() < 0) {	//Sets timer when passenger starts to enter the seat row
 				activePassengers[i].setBaggageTimerStart(glutGet(GLUT_ELAPSED_TIME));
 			}
-			else if ((glutGet(GLUT_ELAPSED_TIME) - activePassengers[i].getBaggageTimerStart()) < 1000) {	//If passenger waits less than one second
+			else if ((glutGet(GLUT_ELAPSED_TIME) - activePassengers[i].getBaggageTimerStart()) < 1000 / simSpeed) {	//If passenger waits less than one second
 				//Do nothing
 			}
 

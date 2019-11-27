@@ -84,15 +84,15 @@ void ConsoleEngine::runConsoleEngine() {
 	// Initialise everything needed for the simulation
 	init();
 
-	std::cout << "\nRunning the simulation!..." << std::endl;
-	clock_t startTimer = clock();
+	std::cout << "\nStarting the simulation..." << std::endl;
+	auto startTime = std::chrono::high_resolution_clock::now();
 	
 	while (!c_activePassengers.empty()) {
 		c_PE.updatePositions(c_activePassengers, c_activeSeatedPassengers, c_aislePosY);
 	}
 		
-	clock_t totalRuntime = clock();
-	std::cout << "All passengers are seated." << std::endl;
+	auto endTime = std::chrono::high_resolution_clock::now();
+	std::cout << "\nAll passengers are seated." << std::endl;
 	std::cout << "The algorithm used was: '" << c_currentAlgorithm << "' and the plane template was: '" << c_aircraftName << "'" << std::endl;
-	std::cout << "Everyone is seated. The total runtime was (in seconds): " << (totalRuntime - startTimer) / (double)CLOCKS_PER_SEC << std::endl;
+	std::cout << "Everyone is seated. The total runtime was (in seconds): " << std::chrono::duration<double>(endTime - startTime).count() << std::endl;
 }

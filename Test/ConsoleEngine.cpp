@@ -94,5 +94,6 @@ void ConsoleEngine::runConsoleEngine() {
 	auto endTime = std::chrono::high_resolution_clock::now();
 	std::cout << "\nAll passengers are seated." << std::endl;
 	std::cout << "The algorithm used was: '" << c_currentAlgorithm << "' and the plane template was: '" << c_aircraftName << "'" << std::endl;
-	std::cout << "Everyone is seated. The total runtime was (in seconds): " << std::chrono::duration<double>(endTime - startTime).count() << std::endl;
+	PhysicsEngine PE;
+	std::cout << "Everyone is seated. The total runtime was (in seconds): " << std::chrono::duration<double>(endTime - startTime).count() * PE.getSimSpeed() << std::endl;
 }

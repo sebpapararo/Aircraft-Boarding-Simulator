@@ -27,8 +27,8 @@ bool isPressed = false;
 //FPS and runtime timing
 int FPSCap = 60;
 float FPS = 0.0f;
-double startTime;
-double totalRuntime;
+std::chrono::steady_clock::time_point startTime;
+std::chrono::duration<double, std::milli> totalRuntime;
 const char* runtimeResultText = "Simulation runtime (in seconds): ";
 
 //Texture/shape parameters
@@ -66,8 +66,6 @@ void GraphicsEngine::init() {
 	reshape(screenWidth, screenHeight);
 
 	Passenger1 = DO.loadPNG(passenger1Path);
-
-	startTime = glutGet(GLUT_ELAPSED_TIME);
 }
 
 void GraphicsEngine::initSettings(int strategy, int layout) {
@@ -159,9 +157,9 @@ void GraphicsEngine::display() {
 
 		//Runtime timing
 		if (!g_activePassengers.empty()) {
-			double endTime = glutGet(GLUT_ELAPSED_TIME);
+			auto endTime = std::chrono::high_resolution_clock::now();;
 			PhysicsEngine PE;
-			totalRuntime = ((endTime - startTime) / 1000) * PE.getSimSpeed();
+			totalRuntime = (endTime - startTime) / 1000 * PE.getSimSpeed();
 		} 
 
 		if (!isConsole) {
@@ -171,14 +169,14 @@ void GraphicsEngine::display() {
 			// Display the current template name to the window
 			infoDisplay("Aircraft map: " + g_selectedAircraft.getTemplateName(), -150.0f, -75.0f);
 
-			infoDisplay(runtimeResultText + std::to_string(totalRuntime), -150.0f, -80.0f);
+			infoDisplay(runtimeResultText + std::to_string(totalRuntime.count()), -150.0f, -80.0f);
 		}
 
 		if (g_activePassengers.empty() && !isBoarded) {
 			isBoarded = true;
 			std::cout << "Boarding strategy: " + g_currentAlgorithm << std::endl;
 			std::cout << "Aircraft map: " + g_selectedAircraft.getTemplateName() << std::endl;
-			std::cout << runtimeResultText + std::to_string(totalRuntime) << std::endl;
+			std::cout << runtimeResultText + std::to_string(totalRuntime.count()) << std::endl;
 		}
 	}
 	glFlush();	//Render now
@@ -249,7 +247,7 @@ void GraphicsEngine::processKeys(unsigned char key, int x, int y) {	//Takes keyb
 		if (!isStarted) {
 			isStarted = true;
 			initSettings(strategySelect, mapSelect);
-			startTime = glutGet(GLUT_ELAPSED_TIME);
+			startTime = std::chrono::high_resolution_clock::now();
 		}
 		else {
 			isStarted = false;

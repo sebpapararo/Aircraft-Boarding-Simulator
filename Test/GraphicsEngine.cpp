@@ -1,6 +1,7 @@
 #include "GraphicsEngine.h"
 
 int zoom = 0;
+bool isZoom = false;
 
 int window = 0;
 bool isConsole = false;
@@ -12,12 +13,12 @@ int strategySelect = 1;
 int mapSelect = 1;
 
 std::string strategiesList[] = { "Back-to-Front", "Seat-by-Seat", "Random", "Row-by-Row" };
-std::string mapList[] = { "AirbusA319", "Boeing737" };
+std::string mapList[] = { "Airbus A319", "Boeing 737-800", "Boeing 767-300ER" };
 
 std::string setStrategyText = "--> Set boarding strategy: ";
 std::string setMapText = "Set aircraft map: ";
 std::string selectedStrategyText = "Back-to-Front";
-std::string selectedMapText = "AirbusA319";
+std::string selectedMapText = "Airbus A319";
 
 int screenWidth = GetSystemMetrics(SM_CXSCREEN), screenHeight = GetSystemMetrics(SM_CYSCREEN);
 float aspect;
@@ -50,7 +51,7 @@ int g_noOfRows;
 int g_noOfColumns;
 vector<Passenger> g_activePassengers;
 vector<Passenger> g_activeSeatedPassengers;
-float g_aislePosY;
+vector<float> g_aislePosY;
 vector<vec2> g_activeWallPos;
 std::string g_currentAlgorithm;
 
@@ -74,9 +75,15 @@ void GraphicsEngine::initSettings(int strategy, int layout) {
 
 	if (layout == 1) {
 		g_selectedAircraft = AirbusA319();
+		zoom = 0;
+	}
+	else if (layout == 2) {
+		g_selectedAircraft = Boeing737();
+		zoom = 10;
 	}
 	else {
-		g_selectedAircraft = Boeing737();
+		g_selectedAircraft = Boeing767_300ER();
+		zoom = 60.0f;
 	}
 
 	g_aircraftName = g_selectedAircraft.getTemplateName();
@@ -249,16 +256,19 @@ void GraphicsEngine::processKeys(unsigned char key, int x, int y) {	//Takes keyb
 			isStarted = true;
 			initSettings(strategySelect, mapSelect);
 			startTime = glutGet(GLUT_ELAPSED_TIME);
+			isZoom = true;
 		}
 		else {
 			isStarted = false;
+			zoom = 0;
+			isZoom = false;
 		}
 	}
 
-	if (key == '-') {
+	if (key == '-' && isZoom == true) {
 		zoom++;
 	}
-	if (key == '+') {
+	if (key == '+' && isZoom == true) {
 		zoom--;
 	}
 	
@@ -293,14 +303,14 @@ void GraphicsEngine::processSpecialKeys(int key, int x, int y) {
 		else if (key == GLUT_KEY_RIGHT) {
 			if (menuSelect == 1) {
 				strategySelect++;
-				if (strategySelect > 4) {
+				if (strategySelect > (sizeof(strategiesList) / sizeof(strategiesList[0]))) {
 					strategySelect = 1;
 				}
 				selectedStrategyText = strategiesList[strategySelect - 1];
 			}
 			else if (menuSelect == 2) {
 				mapSelect++;
-				if (mapSelect > 2) {
+				if (mapSelect > (sizeof(mapList) / sizeof(mapList[0]))) {
 					mapSelect = 1;
 				}
 				selectedMapText = mapList[mapSelect - 1];
@@ -310,14 +320,14 @@ void GraphicsEngine::processSpecialKeys(int key, int x, int y) {
 			if (menuSelect == 1) {
 				strategySelect--;
 				if (strategySelect < 1) {
-					strategySelect = 4;
+					strategySelect = (sizeof(strategiesList) / sizeof(strategiesList[0]));
 				}
 				selectedStrategyText = strategiesList[strategySelect - 1];
 			}
 			else if (menuSelect == 2) {
 				mapSelect--;
 				if (mapSelect < 1) {
-					mapSelect = 2;
+					mapSelect = (sizeof(mapList) / sizeof(mapList[0]));
 				}
 				selectedMapText = mapList[mapSelect - 1];
 			}

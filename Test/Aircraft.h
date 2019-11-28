@@ -11,13 +11,13 @@ public:
 	vector<vector<vec2>> getTemplate() const;
 	int getNoOfRows() const;
 	int getNoOfColumns() const;
-	float getAislePosY() const;
+	vector<float> getAislePosY() const;
 	std::string getTemplateName() const;
 	vector<vector<vec2>> getDoorPos() const;
 	vector<vec2> getWallPos() const;
 
 protected:
-	float aislePosY;
+	vector<float> aislePosY;
 	int noOfRows;
 	int noOfColumns;			// Note: this is also the max number of seats in any row
 	std::string templateName;
@@ -34,4 +34,9 @@ public:
 class Boeing737 : public Aircraft{
 public:
 	Boeing737();
+};
+
+class Boeing767_300ER : public Aircraft {
+public:
+	Boeing767_300ER();
 };

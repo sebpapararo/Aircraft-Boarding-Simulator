@@ -9,5 +9,5 @@ using std::vector;
 class PhysicsEngine {
 public:
 	float passengerRadius = 2.0f;	//Collision detection
-	void updatePositions(vector<Passenger> &activePassengers, vector<Passenger> &activeSeatedPassengers, float aislePosY);
+	void updatePositions(vector<Passenger> &activePassengers, vector<Passenger> &activeSeatedPassengers, vector<float> aislePosY);
 };

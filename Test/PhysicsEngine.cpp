@@ -55,7 +55,7 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 		// ================== Movement Logic ==================
 
 		//If aligned with the aisle, set to true
-		if (tempInitPos.y == aislePosY[0]) {
+		if (tempInitPos.y == activePassengers[i].getAisleY()) {
 			activePassengers[i].setIsYAlignedWithAisle(true);
 		}
 
@@ -64,10 +64,10 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 
 		//Lines up passengers with the aisle
 		if (!tempIsAisleAligned) {
-			if (tempInitPos.y < aislePosY[0]) {											//If below aisle, walk up
+			if (tempInitPos.y < activePassengers[i].getAisleY()) {											//If below aisle, walk up
 				vec2 newPos = tempInitPos + vec2(0.0f, tempSpeed);
 
-				if (tempInitPos.y + distanceCD < aislePosY[0]) {
+				if (tempInitPos.y + distanceCD < activePassengers[i].getAisleY()) {
 
 					// checking each passenger for collision detection: 
 					for (size_t j = 0; j < activePassengers.size(); j++) {			
@@ -83,8 +83,8 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 					}
 				}
 				// if the passenger has overshot the aisle, line him up on the aisle! TODO: move passengers who have overshot the aisle, into the aisle the distance they overshot!
-				if (tempInitPos.y + distanceCD >= aislePosY[0]) {
-					activePassengers[i].setInitPos(vec2(tempInitPos.x, aislePosY[0]));
+				if (tempInitPos.y + distanceCD >= activePassengers[i].getAisleY()) {
+					activePassengers[i].setInitPos(vec2(tempInitPos.x, activePassengers[i].getAisleY()));
 					activePassengers[i].setIsYAlignedWithAisle(true);
 				}
 				else {
@@ -94,12 +94,12 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 			}
 
 			// else if the passenger is above its aisle, walk down
-			else if (tempInitPos.y > aislePosY[0]) {
+			else if (tempInitPos.y > activePassengers[i].getAisleY()) {
 
 				vec2 newPos = tempInitPos + vec2(0.0f, -tempSpeed);
 
 				// checking each passenger for collision detection: 
-				if (tempInitPos.y + distanceCD > aislePosY[0]) {
+				if (tempInitPos.y + distanceCD > activePassengers[i].getAisleY()) {
 
 					for (size_t j = 0; j < activePassengers.size(); j++) {
 						int xd = newPos.x - activePassengers[j].getInitPos().x;
@@ -112,8 +112,8 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 					}
 				}
 				// if the passenger has overshot the aisle, line him up on the aisle!
-				if (tempInitPos.y + distanceCD <= aislePosY[0]) {
-					activePassengers[i].setInitPos(vec2(tempInitPos.x, aislePosY[0]));
+				if (tempInitPos.y + distanceCD <= activePassengers[i].getAisleY()) {
+					activePassengers[i].setInitPos(vec2(tempInitPos.x, activePassengers[i].getAisleY()));
 					activePassengers[i].setIsYAlignedWithAisle(true);
 				}
 				else {
@@ -129,7 +129,7 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 				vec2 newPos = tempInitPos + vec2(tempSpeed, 0.0f);
 				for (size_t j = 0; j < activePassengers.size(); j++) {	//Collision detection
 
-					if (abs(newPos.x - activePassengers[j].getInitPos().x) < distanceCD &&
+					if (abs(newPos.x - activePassengers[j].getInitPos().x) < distanceCD && abs(newPos.y - activePassengers[j].getInitPos().y) < distanceCD &&
 						activePassengers[j].getIsYAlignedWithAisle() &&
 						i != j) {
 						if (tempIsWalkingRight != activePassengers[j].getIsWalkingRight() && 
@@ -159,7 +159,7 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 				vec2 newPos = tempInitPos + vec2(-tempSpeed, 0.0f);
 				for (size_t j = 0; j < activePassengers.size(); j++) {	//Collision detection
 
-					if (abs(newPos.x - activePassengers[j].getInitPos().x) < distanceCD &&
+					if (abs(newPos.x - activePassengers[j].getInitPos().x) < distanceCD && abs(newPos.y - activePassengers[j].getInitPos().y) < distanceCD &&
 						activePassengers[j].getIsYAlignedWithAisle() &&
 						i != j) {
 						if (tempIsWalkingRight != activePassengers[j].getIsWalkingRight() && 

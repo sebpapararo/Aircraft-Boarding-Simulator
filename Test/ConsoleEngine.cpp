@@ -68,16 +68,16 @@ void ConsoleEngine::init() {
 	// Generate passengers for the chosen boarding algorithm
 	switch (algorithmChoice) {
 		case 1:
-			c_SS.backToFront(c_currentAlgorithm, c_noOfRows, c_activeTemplate, c_activeDoorPos, c_activePassengers);
+			c_SS.backToFront(c_currentAlgorithm, c_noOfRows, c_activeTemplate, c_activeDoorPos, c_activePassengers, c_aislePosY);
 			break;
 		case 2:
-			c_SS.seatBySeat(c_currentAlgorithm, c_noOfRows, c_noOfColumns, c_aircraftName, c_activeTemplate, c_activeDoorPos, c_activePassengers);
+			c_SS.seatBySeat(c_currentAlgorithm, c_noOfRows, c_noOfColumns, c_aircraftName, c_activeTemplate, c_activeDoorPos, c_activePassengers, c_aislePosY);
 			break;
 		case 3:
-			c_SS.rowByRow(c_currentAlgorithm, c_noOfRows, c_activeTemplate, c_activeDoorPos, c_activePassengers);
+			c_SS.rowByRow(c_currentAlgorithm, c_noOfRows, c_activeTemplate, c_activeDoorPos, c_activePassengers, c_aislePosY);
 			break;
 		case 4:
-			c_SS.randomSeat(c_currentAlgorithm, c_noOfRows, c_noOfColumns, c_aircraftName, c_activeTemplate, c_activeDoorPos, c_activePassengers);
+			c_SS.randomSeat(c_currentAlgorithm, c_noOfRows, c_noOfColumns, c_aircraftName, c_activeTemplate, c_activeDoorPos, c_activePassengers, c_aislePosY);
 			break;
 	}
 }

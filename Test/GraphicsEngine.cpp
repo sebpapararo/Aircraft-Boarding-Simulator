@@ -97,16 +97,16 @@ void GraphicsEngine::initSettings(int strategy, int layout) {
 	g_activeWallPos = g_selectedAircraft.getWallPos();
 
 	if (strategy == 1) {
-		g_SS.backToFront(g_currentAlgorithm, g_noOfRows, g_activeTemplate, g_activeDoorPos, g_activePassengers);
+		g_SS.backToFront(g_currentAlgorithm, g_noOfRows, g_activeTemplate, g_activeDoorPos, g_activePassengers, g_aislePosY);
 	}
 	else if (strategy == 2) {
-		g_SS.seatBySeat(g_currentAlgorithm, g_noOfRows, g_noOfColumns, g_aircraftName, g_activeTemplate, g_activeDoorPos, g_activePassengers);
+		g_SS.seatBySeat(g_currentAlgorithm, g_noOfRows, g_noOfColumns, g_aircraftName, g_activeTemplate, g_activeDoorPos, g_activePassengers, g_aislePosY);
 	}
 	else if (strategy == 3) {
-		g_SS.randomSeat(g_currentAlgorithm, g_noOfRows, g_noOfColumns, g_aircraftName, g_activeTemplate, g_activeDoorPos, g_activePassengers);
+		g_SS.randomSeat(g_currentAlgorithm, g_noOfRows, g_noOfColumns, g_aircraftName, g_activeTemplate, g_activeDoorPos, g_activePassengers, g_aislePosY);
 	}
 	else {
-		g_SS.rowByRow(g_currentAlgorithm, g_noOfRows, g_activeTemplate, g_activeDoorPos, g_activePassengers);
+		g_SS.rowByRow(g_currentAlgorithm, g_noOfRows, g_activeTemplate, g_activeDoorPos, g_activePassengers, g_aislePosY);
 	}
 }
 

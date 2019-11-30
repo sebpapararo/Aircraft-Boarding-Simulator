@@ -20,6 +20,13 @@ void Passenger::setInitPos(vec2 init) {
 	initPos = init;
 }
 
+float Passenger::getAisleY() const {
+	return aisleY;
+}
+void Passenger::setAisleY(float y) {
+	aisleY = y;
+}
+
 float Passenger::getWalkingSpeed() const {
 	return walkingSpeed;
 }

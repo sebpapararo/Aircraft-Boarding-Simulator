@@ -14,7 +14,7 @@ int strategySelect = 1;
 int actveDoorsSelect = 1;
 int mapSelect = 1;
 
-std::string strategiesList[] = { "Back-to-Front", "Centre-Out", "Seat-by-Seat", "Random", "Row-by-Row" };
+std::string strategiesList[] = { "Back-to-Front", "Inside-Out", "Outside-In", "Seat-by-Seat", "Random", "Row-by-Row" };
 std::string activeDoorsList[] = { "Rear", "Front", "Front and Rear" };
 std::string mapList[] = { "Airbus A319", "Boeing 737-800", "Boeing 767-300ER" };
 
@@ -109,12 +109,15 @@ void GraphicsEngine::initSettings(int strategy, int layout, int doorConfig) {
 		g_SS.backToFront(g_currentAlgorithm, g_noOfRows, g_activeTemplate, g_activeDoorPos, doorConfig, g_activePassengers, g_aislePosY);
 	}
 	else if (strategy == 2) {
-		g_SS.centreOut(g_currentAlgorithm, g_noOfRows, g_activeTemplate, g_activeDoorPos, doorConfig, g_activePassengers, g_aislePosY);
+		g_SS.insideOut(g_currentAlgorithm, g_noOfRows, g_activeTemplate, g_activeDoorPos, doorConfig, g_activePassengers, g_aislePosY);
 	}
 	else if (strategy == 3) {
-		g_SS.seatBySeat(g_currentAlgorithm, g_noOfRows, g_noOfColumns, g_aircraftName, g_activeTemplate, g_activeDoorPos, doorConfig, g_activePassengers, g_aislePosY);
+		g_SS.outsideIn(g_currentAlgorithm, g_noOfRows, g_activeTemplate, g_activeDoorPos, doorConfig, g_activePassengers, g_aislePosY);
 	}
 	else if (strategy == 4) {
+		g_SS.seatBySeat(g_currentAlgorithm, g_noOfRows, g_noOfColumns, g_aircraftName, g_activeTemplate, g_activeDoorPos, doorConfig, g_activePassengers, g_aislePosY);
+	}
+	else if (strategy == 5) {
 		g_SS.randomSeat(g_currentAlgorithm, g_noOfRows, g_noOfColumns, g_aircraftName, g_activeTemplate, g_activeDoorPos, doorConfig, g_activePassengers, g_aislePosY);
 	}
 	else {

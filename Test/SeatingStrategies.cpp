@@ -46,8 +46,8 @@ void SeatingStrategies::backToFront(std::string &currentAlgorithm, int noOfRows,
 	}
 }
 
-void SeatingStrategies::centreOut(std::string &currentAlgorithm, int noOfRows, vector<vector<vec2>> activeTemplate, vector<vector<vec2>> activeDoorPos, int actveDoorsSelect, vector<Passenger> &activePassengers, vector<float> aislePosY) {
-	currentAlgorithm = "Centre-Out";
+void SeatingStrategies::insideOut(std::string &currentAlgorithm, int noOfRows, vector<vector<vec2>> activeTemplate, vector<vector<vec2>> activeDoorPos, int actveDoorsSelect, vector<Passenger> &activePassengers, vector<float> aislePosY) {
+	currentAlgorithm = "Inside-Out";
 	int count1 = 0;
 	int count2 = 0;
 
@@ -81,6 +81,70 @@ void SeatingStrategies::centreOut(std::string &currentAlgorithm, int noOfRows, v
 	}
 
 	for (int i = noOfRows / 2; i < noOfRows; i++) {
+		for (size_t j = 0; j < activeTemplate[i].size(); j++) {
+			Passenger *p;
+
+			if (actveDoorsSelect == 1) {
+				p = new Passenger(activeTemplate[i][j], activeDoorPos[1][1] + vec2(0.0f, (-10.0f * count1)), false);	//Passengers enter through rear-left door
+				count1++;
+			}
+			else if (actveDoorsSelect == 2) {
+				p = new Passenger(activeTemplate[i][j], activeDoorPos[0][1] + vec2(0.0f, (-10.0f * count2)), true);		//Passengers enter through front-left door
+				count2++;
+			}
+			else { // If 3, then initialize for front and rear door
+				p = new Passenger(activeTemplate[i][j], activeDoorPos[1][1] + vec2(0.0f, (-10.0f * count2)), true);		//Passengers enter through rear-left door
+				count2++;
+			}
+
+
+			if (j > (activeTemplate[i].size() / 2) - 1 && aislePosY.size() > 1) {
+				p->setAisleY(aislePosY[1]);
+			}
+			else {
+				p->setAisleY(aislePosY[0]);
+			}
+
+			activePassengers.push_back(*p);
+		}
+	}
+}
+
+void SeatingStrategies::outsideIn(std::string &currentAlgorithm, int noOfRows, vector<vector<vec2>> activeTemplate, vector<vector<vec2>> activeDoorPos, int actveDoorsSelect, vector<Passenger> &activePassengers, vector<float> aislePosY) {
+	currentAlgorithm = "Outside-In";
+	int count1 = 0;
+	int count2 = 0;
+
+	for (int i = 0; i < (noOfRows/2); i++) {
+		for (size_t j = 0; j < activeTemplate[i].size(); j++) {
+			Passenger *p;
+
+			if (actveDoorsSelect == 1) {
+				p = new Passenger(activeTemplate[i][j], activeDoorPos[1][1] + vec2(0.0f, (-10.0f * count1)), false);	//Passengers enter through rear-left door
+				count1++;
+			}
+			else if (actveDoorsSelect == 2) {
+				p = new Passenger(activeTemplate[i][j], activeDoorPos[0][1] + vec2(0.0f, (-10.0f * count2)), true);		//Passengers enter through front-left door
+				count2++;
+			}
+			else { // If 3, then initialize for front and rear door
+				p = new Passenger(activeTemplate[i][j], activeDoorPos[0][1] + vec2(0.0f, (-10.0f * count1)), false);	//Passengers enter through front-left door
+				count1++;
+			}
+
+
+			if (j > (activeTemplate[i].size() / 2) - 1 && aislePosY.size() > 1) {
+				p->setAisleY(aislePosY[1]);
+			}
+			else {
+				p->setAisleY(aislePosY[0]);
+			}
+
+			activePassengers.push_back(*p);
+		}
+	}
+
+	for (int i = noOfRows-1; i > noOfRows/2-1; i--) {
 		for (size_t j = 0; j < activeTemplate[i].size(); j++) {
 			Passenger *p;
 

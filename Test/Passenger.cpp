@@ -27,11 +27,45 @@ void Passenger::setAisleY(float y) {
 	aisleY = y;
 }
 
-float Passenger::getWalkingSpeed() const {
-	return walkingSpeed;
+float Passenger::getMaxSpeed() const {
+	return maxSpeed;
 }
-void Passenger::setWalkingSpeed(float speed) {
-	walkingSpeed = speed;
+void Passenger::setMaxSpeed(float speed) {
+	maxSpeed = speed;
+}
+
+float Passenger::getCurrSpeed() const {
+	return currSpeed;
+}
+void Passenger::setCurrSpeed(float speed) {
+	currSpeed = speed;
+}
+
+float Passenger::accelerate() {
+	if (currSpeed < maxSpeed) {
+		currSpeed += 0.4f;
+		return currSpeed;
+	}
+	else {
+		return currSpeed;
+	}
+}
+float Passenger::decelerate() {
+	if (currSpeed > 0.0f) {
+		currSpeed -= 2.0f;
+		if (currSpeed < 0.0f) {
+			currSpeed = 0.0f;
+		}
+		return currSpeed;
+	}
+	else {
+		return currSpeed;
+	}
+}
+float Passenger::stop() {
+	float temp = currSpeed;
+	currSpeed = 0.0f;
+	return temp;
 }
 
 bool Passenger::getIsWalkingRight() const {

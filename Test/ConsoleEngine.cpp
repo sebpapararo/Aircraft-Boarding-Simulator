@@ -68,16 +68,16 @@ void ConsoleEngine::init() {
 	// Generate passengers for the chosen boarding algorithm
 	switch (algorithmChoice) {
 		case 1:
-			c_SS.backToFront(c_currentAlgorithm, c_noOfRows, c_activeTemplate, c_activeDoorPos, c_activePassengers, c_aislePosY);
+			c_SS.backToFront(c_currentAlgorithm, c_noOfRows, c_activeTemplate, c_activeDoorPos, 0, c_activePassengers, c_aislePosY);
 			break;
 		case 2:
-			c_SS.seatBySeat(c_currentAlgorithm, c_noOfRows, c_noOfColumns, c_aircraftName, c_activeTemplate, c_activeDoorPos, c_activePassengers, c_aislePosY);
+			c_SS.seatBySeat(c_currentAlgorithm, c_noOfRows, c_noOfColumns, c_aircraftName, c_activeTemplate, c_activeDoorPos, 0, c_activePassengers, c_aislePosY);
 			break;
 		case 3:
-			c_SS.rowByRow(c_currentAlgorithm, c_noOfRows, c_activeTemplate, c_activeDoorPos, c_activePassengers, c_aislePosY);
+			c_SS.rowByRow(c_currentAlgorithm, c_noOfRows, c_activeTemplate, c_activeDoorPos, 0, c_activePassengers, c_aislePosY);
 			break;
 		case 4:
-			c_SS.randomSeat(c_currentAlgorithm, c_noOfRows, c_noOfColumns, c_aircraftName, c_activeTemplate, c_activeDoorPos, c_activePassengers, c_aislePosY);
+			c_SS.randomSeat(c_currentAlgorithm, c_noOfRows, c_noOfColumns, c_aircraftName, c_activeTemplate, c_activeDoorPos, 0, c_activePassengers, c_aislePosY);
 			break;
 	}
 }
@@ -91,11 +91,12 @@ void ConsoleEngine::runConsoleEngine() {
 	clock_t startTimer = clock();
 	
 	while (!c_activePassengers.empty()) {
-		c_PE.updatePositions(c_activePassengers, c_activeSeatedPassengers, c_aislePosY);
+		c_PE.updatePositions(c_activePassengers, c_activeSeatedPassengers, c_aislePosY, startTimer);
 	}
 		
 	clock_t totalRuntime = clock();
 	std::cout << "All passengers are seated." << std::endl;
 	std::cout << "The algorithm used was: '" << c_currentAlgorithm << "' and the plane template was: '" << c_aircraftName << "'" << std::endl;
 	std::cout << "Everyone is seated. The total runtime was (in seconds): " << (totalRuntime - startTimer) / (double)CLOCKS_PER_SEC << std::endl;
+	std::cout << "Everyone is seated. Average time to be seated was (in seconds): " << c_PE.getAverageSeatedTime() / (double)CLOCKS_PER_SEC << std::endl;
 }

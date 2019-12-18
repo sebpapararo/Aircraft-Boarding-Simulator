@@ -17,7 +17,7 @@ public:
 
 private:
 	static void init();
-	static void initSettings(int strategy, int layout);
+	static void initSettings(int strategy, int layout, int doorConfig);
 	static void display();
 	static void FPSLock(int FPSCap);
 	static void infoDisplay(std::string outputString, float posX, float posY);

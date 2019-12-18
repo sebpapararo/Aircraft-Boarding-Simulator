@@ -14,7 +14,7 @@ int strategySelect = 1;
 int actveDoorsSelect = 1;
 int mapSelect = 1;
 
-std::string strategiesList[] = { "Back-to-Front", "Seat-by-Seat", "Random", "Row-by-Row" };
+std::string strategiesList[] = { "Back-to-Front", "Centre-Out", "Seat-by-Seat", "Random", "Row-by-Row" };
 std::string activeDoorsList[] = { "Rear", "Front", "Front and Rear" };
 std::string mapList[] = { "Airbus A319", "Boeing 737-800", "Boeing 767-300ER" };
 
@@ -26,7 +26,7 @@ std::string selectedStrategyText = "Back-to-Front";
 std::string selectedDoorsText = "Rear";
 std::string selectedMapText = "Airbus A319";
 
-int totalPassengers;
+int totalPassengers = 0;
 
 int screenWidth = GetSystemMetrics(SM_CXSCREEN), screenHeight = GetSystemMetrics(SM_CYSCREEN);
 float aspect;
@@ -105,20 +105,23 @@ void GraphicsEngine::initSettings(int strategy, int layout, int doorConfig) {
 	g_activeWallPos = g_selectedAircraft.getWallPos();
 	isBoarded = false;
 
-	totalPassengers = sizeof(g_activePassengers)/sizeof(g_activePassengers[0]);
-
 	if (strategy == 1) {
 		g_SS.backToFront(g_currentAlgorithm, g_noOfRows, g_activeTemplate, g_activeDoorPos, doorConfig, g_activePassengers, g_aislePosY);
 	}
 	else if (strategy == 2) {
-		g_SS.seatBySeat(g_currentAlgorithm, g_noOfRows, g_noOfColumns, g_aircraftName, g_activeTemplate, g_activeDoorPos, doorConfig, g_activePassengers, g_aislePosY);
+		g_SS.centreOut(g_currentAlgorithm, g_noOfRows, g_activeTemplate, g_activeDoorPos, doorConfig, g_activePassengers, g_aislePosY);
 	}
 	else if (strategy == 3) {
+		g_SS.seatBySeat(g_currentAlgorithm, g_noOfRows, g_noOfColumns, g_aircraftName, g_activeTemplate, g_activeDoorPos, doorConfig, g_activePassengers, g_aislePosY);
+	}
+	else if (strategy == 4) {
 		g_SS.randomSeat(g_currentAlgorithm, g_noOfRows, g_noOfColumns, g_aircraftName, g_activeTemplate, g_activeDoorPos, doorConfig, g_activePassengers, g_aislePosY);
 	}
 	else {
 		g_SS.rowByRow(g_currentAlgorithm, g_noOfRows, g_activeTemplate, g_activeDoorPos, doorConfig, g_activePassengers, g_aislePosY);
 	}
+
+	totalPassengers = g_activePassengers.size();
 }
 
 
@@ -196,7 +199,7 @@ void GraphicsEngine::display() {
 
 			infoDisplay(runtimeResultText + std::to_string(totalRuntime), displayX, displayY + spacing * 3);
 
-			infoDisplay("Total number of seats/passengers:" + std::to_string(totalPassengers), displayX, displayY + spacing * 4);
+			infoDisplay("Total number of seats/passengers: " + std::to_string(totalPassengers), displayX, displayY + spacing * 4);
 
 			if (isBoarded) {
 				infoDisplay("Average time to reach a seat (in seconds): " + std::to_string(g_PE.getAverageSeatedTime()), displayX, displayY + spacing * 5);

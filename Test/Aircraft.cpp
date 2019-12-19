@@ -42,7 +42,8 @@ AirbusA319::AirbusA319() {
 }
 
 
-//AirbusA321neo constructor
+//Airbus A321neo constructor
+//https://www.seatguru.com/airlines/EasyJet_Airlines/easyJet_Airbus_A321neo.php
 AirbusA321neo::AirbusA321neo() {
 	templateName = "Airbus A321neo";
 	noOfRows = 40;
@@ -86,14 +87,98 @@ AirbusA321neo::AirbusA321neo() {
 		rowMove += rowMoveIncrement;
 	}
 
-
-
-
 	doorPos.push_back({ vec2(-225.0f, 55.0f), vec2(-225.0f, 15.0f) });	//Index 0, front right and left doors
 	doorPos.push_back({ vec2(220.0f, 55.0f), vec2(220.0f, 15.0f) });		//Index 1, rear right and left doors
 
 	wallPos = { vec2(-240.0f, 15.0f),vec2(-230.0f, 15.0f),  vec2(-220.0f, 15.0f),vec2(-45.0f, 15.0f),  vec2(-35.0f, 15.0f),vec2(-25.0f, 15.0f),  vec2(-15.0f, 15.0f),vec2(85.0f, 15.0f),  vec2(95.0f, 15.0f),vec2(215.0f, 15.0f), vec2(225.0f, 15.0f),vec2(250.0f, 15.0f),
 				vec2(-240.0f, 55.0f),vec2(-230.0f, 55.0f),  vec2(-220.0f, 55.0f),vec2(-45.0f, 55.0f),  vec2(-35.0f, 55.0f),vec2(-25.0f, 55.0f),  vec2(-15.0f, 55.0f),vec2(85.0f, 55.0f),  vec2(95.0f, 55.0f),vec2(215.0f, 55.0f), vec2(225.0f, 55.0f),vec2(250.0f, 55.0f) };
+}
+
+
+//Airbus A380-800 constructor
+//https://www.seatguru.com/airlines/Emirates_Airlines/Emirates_Airlines_Airbus_A380.php
+AirbusA380_800::AirbusA380_800() {
+	templateName = "Airbus A380-800";
+	noOfRows = 46;
+	noOfColumns = 10;
+	float rowMove = 0.0f;				// Initial row position
+	float rowMoveIncrement = 10.0f;		// Space between rows
+	float exitGap = 20.0f;				// Space between emergency row and normal row
+	aislePosY = { 50.0f, 25.0f };		// y coordinate of the aisle
+	float x = -270.0f;					// x coordinate of the left most row
+
+	float y1 = 65.0f;					// y coordinate of 1st column
+	float y2 = 60.0f;
+	float y3 = 55.0f;
+
+	float y4 = 45.0f;
+	float y5 = 40.0f;
+	float y6 = 35.0f;
+	float y7 = 30.0f;
+
+	float y8 = 20.0f;
+	float y9 = 15.0f;
+	float y10 = 10.0f;
+
+	for (int i = 0; i < 2; i++) {
+		layout.push_back({ vec2(x + rowMove, y1), vec2(x + rowMove, y2), vec2(x + rowMove, y3), vec2(x + rowMove, y8), vec2(x + rowMove, y9), vec2(x + rowMove, y10) });
+		rowMove += rowMoveIncrement;
+	}
+
+	for (int i = 0; i < 6; i++) {
+		layout.push_back({ vec2(x + rowMove, y1), vec2(x + rowMove, y2), vec2(x + rowMove, y3), vec2(x + rowMove, y4), vec2(x + rowMove, y5), vec2(x + rowMove, y6), vec2(x + rowMove, y7), vec2(x + rowMove, y8), vec2(x + rowMove, y9), vec2(x + rowMove, y10) });
+		rowMove += rowMoveIncrement;
+	}
+
+	layout.push_back({ vec2(x + rowMove, y4), vec2(x + rowMove, y5), vec2(x + rowMove, y6), vec2(x + rowMove, y7) });
+	rowMove += exitGap + rowMoveIncrement * 4;
+
+	for (int i = 0; i < 2; i++) {
+		layout.push_back({ vec2(x + rowMove, y1), vec2(x + rowMove, y2), vec2(x + rowMove, y3), vec2(x + rowMove, y8), vec2(x + rowMove, y9), vec2(x + rowMove, y10) });
+		rowMove += rowMoveIncrement;
+	}
+
+	for (int i = 0; i < 12; i++) {
+		layout.push_back({ vec2(x + rowMove, y1), vec2(x + rowMove, y2), vec2(x + rowMove, y3), vec2(x + rowMove - 2.5f, y4), vec2(x + rowMove - 2.5f, y5), vec2(x + rowMove - 2.5f, y6), vec2(x + rowMove - 2.5f, y7), vec2(x + rowMove, y8), vec2(x + rowMove, y9), vec2(x + rowMove, y10) });
+		rowMove += rowMoveIncrement;
+	}
+
+	layout.push_back({ vec2(x + rowMove, y1), vec2(x + rowMove, y2), vec2(x + rowMove, y3) });
+	rowMove += rowMoveIncrement * 3 + exitGap;
+
+	layout.push_back({ vec2(x + rowMove, y2), vec2(x + rowMove, y3), vec2(x + rowMove - 2.5f, y4), vec2(x + rowMove - 2.5f, y5), vec2(x + rowMove - 2.5f, y6), vec2(x + rowMove - 2.5f, y7), vec2(x + rowMove, y8), vec2(x + rowMove, y9) });
+	rowMove += rowMoveIncrement;
+
+	for (int i = 0; i < 11; i++) {
+		layout.push_back({ vec2(x + rowMove, y1), vec2(x + rowMove, y2), vec2(x + rowMove, y3), vec2(x + rowMove - 2.5f, y4), vec2(x + rowMove - 2.5f, y5), vec2(x + rowMove - 2.5f, y6), vec2(x + rowMove - 2.5f, y7), vec2(x + rowMove, y8), vec2(x + rowMove, y9), vec2(x + rowMove, y10) });
+		rowMove += rowMoveIncrement;
+	}
+
+	layout.push_back({ vec2(x + rowMove, y1), vec2(x + rowMove, y2), vec2(x + rowMove, y3), vec2(x + rowMove, y8), vec2(x + rowMove, y9), vec2(x + rowMove, y10) });
+	rowMove += rowMoveIncrement * 2 + exitGap;
+
+	layout.push_back({ vec2(x + rowMove, y2), vec2(x + rowMove, y3), vec2(x + rowMove, y8), vec2(x + rowMove, y9) });
+	rowMove += rowMoveIncrement;
+
+	layout.push_back({ vec2(x + rowMove, y1), vec2(x + rowMove, y2), vec2(x + rowMove, y3), vec2(x + rowMove, y8), vec2(x + rowMove, y9), vec2(x + rowMove, y10) });
+	rowMove += rowMoveIncrement;
+
+	for (int i = 0; i < 3; i++) {
+		layout.push_back({ vec2(x + rowMove, y1), vec2(x + rowMove, y2), vec2(x + rowMove, y3), vec2(x + rowMove - 2.5f, y4), vec2(x + rowMove - 2.5f, y5), vec2(x + rowMove - 2.5f, y6), vec2(x + rowMove - 2.5f, y7), vec2(x + rowMove, y8), vec2(x + rowMove, y9), vec2(x + rowMove, y10) });
+		rowMove += rowMoveIncrement;
+	}
+
+	for (int i = 0; i < 4; i++) {
+		layout.push_back({ vec2(x + rowMove, y1), vec2(x + rowMove, y2), vec2(x + rowMove, y3), vec2(x + rowMove, y8), vec2(x + rowMove, y9), vec2(x + rowMove, y10) });
+		rowMove += rowMoveIncrement;
+	}
+
+	doorPos.push_back({ vec2(-315.0f, 70.0f), vec2(-315.0f, 5.0f) });	//Index 0, front right and left doors
+	doorPos.push_back({ vec2(315.0f, 70.0f), vec2(315.0f, 5.0f) });		//Index 1, rear right and left doors
+
+	wallPos = { vec2(-400.0f, 5.0f),vec2(-320.0f, 5.0f),  vec2(-310.0f, 5.0f),vec2(-195.0f, 5.0f),  vec2(-185.0f, 5.0f),vec2(40.0f, 5.0f),  vec2(50.0f, 5.0f),vec2(195.0f, 5.0f),  vec2(205.0f, 5.0f),vec2(310.0f, 5.0f),  vec2(320.0f, 5.0f),vec2(370.0f, 5.0f),
+				vec2(-400.0f, 70.0f),vec2(-320.0f, 70.0f),  vec2(-310.0f, 70.0f),vec2(-195.0f, 70.0f),  vec2(-185.0f, 70.0f),vec2(40.0f, 70.0f),  vec2(50.0f, 70.0f),vec2(195.0f, 70.0f),  vec2(205.0f, 70.0f),vec2(310.0f, 70.0f),  vec2(320.0f, 70.0f),vec2(370.0f, 70.0f) };
+
 }
 
 

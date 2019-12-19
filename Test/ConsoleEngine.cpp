@@ -20,13 +20,13 @@ void ConsoleEngine::init() {
 	// Ask the user which plane template they want to use
 	int planeChoice;
 	std::cout << "\nWhich plane template would you like to use?" << std::endl;
-	std::cout << "Airbus A319 (1), Boeing 737-800 (2) or Boeing 767-300ER (3)." << std::endl;
+	std::cout << "Airbus A319 (1), Airbus A321neo (2), Airbus A380-800 (3), Boeing 737-800 (4), or Boeing 767-300ER (5)." << std::endl;
 	std::cout << "Enter the number corresponding to your choice: ";
 	std::cin >> planeChoice;
 
 	// Let the user try again if entered an invalid number
-	while (planeChoice != 1 && planeChoice != 2) {
-		std::cout << "Invalid number. Please enter '1' for the Airbus A319, '2' for the Boeing 737-800 or '3' for Boeing 767-300ER: ";
+	while (planeChoice < 1 || planeChoice > 5) {
+		std::cout << "Invalid number. Please enter '1' for Airbus A319, '2' for Airbus A321neo, '3' for Airbus A380-800, '4' for Boeing 737-800 or '5' for Boeing 767-300ER: ";
 		std::cin >> planeChoice;
 	}
 
@@ -36,9 +36,15 @@ void ConsoleEngine::init() {
 			c_selectedAircraft = AirbusA319();
 			break;
 		case 2:
-			c_selectedAircraft = Boeing737();
+			c_selectedAircraft = AirbusA321neo();
 			break;
 		case 3:
+			c_selectedAircraft = AirbusA380_800();
+			break;
+		case 4:
+			c_selectedAircraft = Boeing737();
+			break;
+		case 5:
 			c_selectedAircraft = Boeing767_300ER();
 			break;
 	}

@@ -36,6 +36,11 @@ public:
 	AirbusA321neo();
 };
 
+class AirbusA380_800 : public Aircraft {
+public:
+	AirbusA380_800();
+};
+
 class Boeing737 : public Aircraft{
 public:
 	Boeing737();

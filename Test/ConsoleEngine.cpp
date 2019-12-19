@@ -19,7 +19,8 @@ SeatingStrategies c_SS;
 void ConsoleEngine::init() {
 	// Ask the user which plane template they want to use
 	int planeChoice;
-	std::cout << "\nWhich plane template would you like to use? Airbus A319 (1), Boeing 737-800 (2) or Boeing 767-300ER (3)." << std::endl;
+	std::cout << "\nWhich plane template would you like to use?" << std::endl;
+	std::cout << "Airbus A319 (1), Boeing 737-800 (2) or Boeing 767-300ER (3)." << std::endl;
 	std::cout << "Enter the number corresponding to your choice: ";
 	std::cin >> planeChoice;
 
@@ -65,19 +66,31 @@ void ConsoleEngine::init() {
 		std::cin >> algorithmChoice;
 	}
 
+	int activeDoorsChoice;
+	std::cout << "\nWhich aircraft doors would you like to use?" << std::endl;
+	std::cout << "Rear (1), Front (2), Front and Rear (3)" << std::endl;
+	std::cout << "Enter the number corresponding to your choice: ";
+	std::cin >> activeDoorsChoice;
+
+	// Let the user try again if entered an invalid number
+	while (activeDoorsChoice < 1 || activeDoorsChoice > 3) {
+		std::cout << "Invalid number. Please enter '1' for Rear, '2' for Front, or '3' for Front and rear doors: ";
+		std::cin >> activeDoorsChoice;
+	}
+
 	// Generate passengers for the chosen boarding algorithm
 	switch (algorithmChoice) {
 		case 1:
-			c_SS.backToFront(c_currentAlgorithm, c_noOfRows, c_activeTemplate, c_activeDoorPos, 0, c_activePassengers, c_aislePosY);
+			c_SS.backToFront(c_currentAlgorithm, c_noOfRows, c_activeTemplate, c_activeDoorPos, activeDoorsChoice, c_activePassengers, c_aislePosY);
 			break;
 		case 2:
-			c_SS.seatBySeat(c_currentAlgorithm, c_noOfRows, c_noOfColumns, c_aircraftName, c_activeTemplate, c_activeDoorPos, 0, c_activePassengers, c_aislePosY);
+			c_SS.seatBySeat(c_currentAlgorithm, c_noOfRows, c_noOfColumns, c_aircraftName, c_activeTemplate, c_activeDoorPos, activeDoorsChoice, c_activePassengers, c_aislePosY);
 			break;
 		case 3:
-			c_SS.rowByRow(c_currentAlgorithm, c_noOfRows, c_activeTemplate, c_activeDoorPos, 0, c_activePassengers, c_aislePosY);
+			c_SS.rowByRow(c_currentAlgorithm, c_noOfRows, c_activeTemplate, c_activeDoorPos, activeDoorsChoice, c_activePassengers, c_aislePosY);
 			break;
 		case 4:
-			c_SS.randomSeat(c_currentAlgorithm, c_noOfRows, c_noOfColumns, c_aircraftName, c_activeTemplate, c_activeDoorPos, 0, c_activePassengers, c_aislePosY);
+			c_SS.randomSeat(c_currentAlgorithm, c_noOfRows, c_noOfColumns, c_aircraftName, c_activeTemplate, c_activeDoorPos, activeDoorsChoice, c_activePassengers, c_aislePosY);
 			break;
 	}
 }

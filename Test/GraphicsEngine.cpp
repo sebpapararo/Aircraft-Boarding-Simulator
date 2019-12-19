@@ -125,6 +125,9 @@ void GraphicsEngine::initSettings(int strategy, int layout, int doorConfig) {
 	}
 
 	totalPassengers = g_activePassengers.size();
+
+	g_PE.resetDelta();
+	startTime = glutGet(GLUT_ELAPSED_TIME);
 }
 
 
@@ -287,7 +290,6 @@ void GraphicsEngine::processKeys(unsigned char key, int x, int y) {	//Takes keyb
 		if (!isStarted) {
 			isStarted = true;
 			initSettings(strategySelect, mapSelect, actveDoorsSelect);
-			startTime = glutGet(GLUT_ELAPSED_TIME);
 			if (mapSelect == 1) {
 				displayX = -160.0f;
 				displayY = -30.0f;

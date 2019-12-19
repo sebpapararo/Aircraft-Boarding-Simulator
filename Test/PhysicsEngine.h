@@ -10,6 +10,7 @@ class PhysicsEngine {
 public:
 	void updatePositions(vector<Passenger> &activePassengers, vector<Passenger> &activeSeatedPassengers, vector<float> aislePosY, double startTime);
 	double getAverageSeatedTime();
+	void resetDelta();
 
 private:
 	float passengerRadius = 2.0f;	//Collision detection

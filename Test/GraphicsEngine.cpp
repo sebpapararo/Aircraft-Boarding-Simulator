@@ -16,7 +16,7 @@ int mapSelect = 1;
 
 std::string strategiesList[] = { "Back-to-Front", "Inside-Out", "Outside-In", "Seat-by-Seat", "Random", "Row-by-Row" };
 std::string activeDoorsList[] = { "Rear", "Front", "Front and Rear" };
-std::string mapList[] = { "Airbus A319", "Boeing 737-800", "Boeing 767-300ER" };
+std::string mapList[] = { "Airbus A319", "Airbus A321neo", "Boeing 737-800", "Boeing 767-300ER" };
 
 std::string setStrategyText = "--> Set boarding strategy: ";
 std::string setActiveDoorsTest = "Set active doors: ";
@@ -86,6 +86,10 @@ void GraphicsEngine::initSettings(int strategy, int layout, int doorConfig) {
 		zoom = 0;
 	}
 	else if (layout == 2) {
+		g_selectedAircraft = AirbusA321neo();
+		zoom = 35;
+	}
+	else if (layout == 3) {
 		g_selectedAircraft = Boeing737();
 		zoom = 10;
 	}
@@ -296,11 +300,16 @@ void GraphicsEngine::processKeys(unsigned char key, int x, int y) {	//Takes keyb
 				spacing = -6.0f;
 			}
 			else if (mapSelect == 2) {
+				displayX = -200.0f;
+				displayY = -30.0f;
+				spacing = -8.0f;
+			}
+			else if (mapSelect == 3) {
 				displayX = -180.0f;
 				displayY = -35.0f;
 				spacing = -7.0f;
 			}
-			else if (mapSelect == 3) {
+			else if (mapSelect == 4) {
 				displayX = -260.0f;
 				displayY = -50.0f;
 				spacing = -9.0f;

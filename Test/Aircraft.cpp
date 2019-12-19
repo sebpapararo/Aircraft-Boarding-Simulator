@@ -42,6 +42,61 @@ AirbusA319::AirbusA319() {
 }
 
 
+//AirbusA321neo constructor
+AirbusA321neo::AirbusA321neo() {
+	templateName = "Airbus A321neo";
+	noOfRows = 40;
+	noOfColumns = 6;
+	float rowMove = 0.0f;				// Initial row position
+	float rowMoveIncrement = 10.0f;		// Space between rows
+	float exitGap = 20.0f;				// Space between emergency row and normal row
+	aislePosY = { 35.0f };
+	float x = -210.0f;					// x coordinate of the left most row
+
+	float y1 = 50.0f;					// y coordinate of 1st column
+	float y2 = 45.0f;
+	float y3 = 40.0f;
+
+	float y4 = 30.0f;
+	float y5 = 25.0f;
+	float y6 = 20.0f;
+
+	layout.push_back({ vec2(x + rowMove, y4), vec2(x + rowMove, y5), vec2(x + rowMove, y6) });
+	rowMove += rowMoveIncrement;
+
+	for (int i = 0; i < 16; i++) {
+		layout.push_back({ vec2(x + rowMove, y1), vec2(x + rowMove, y2), vec2(x + rowMove, y3), vec2(x + rowMove, y4), vec2(x + rowMove, y5), vec2(x + rowMove, y6) });
+		rowMove += rowMoveIncrement;
+	}
+
+	rowMove += -rowMoveIncrement + exitGap;
+	layout.push_back({ vec2(x + rowMove, y1), vec2(x + rowMove, y2), vec2(x + rowMove, y3), vec2(x + rowMove, y4), vec2(x + rowMove, y5), vec2(x + rowMove, y6) });
+	rowMove += exitGap;
+
+	for (int i = 0; i < 9; i++) {
+		layout.push_back({ vec2(x + rowMove, y1), vec2(x + rowMove, y2), vec2(x + rowMove, y3), vec2(x + rowMove, y4), vec2(x + rowMove, y5), vec2(x + rowMove, y6) });
+		rowMove += rowMoveIncrement;
+	}
+
+	layout.push_back({ vec2(x + rowMove, y2), vec2(x + rowMove, y3), vec2(x + rowMove, y4), vec2(x + rowMove, y5) });
+	rowMove += exitGap;
+
+	for (int i = 0; i < 12; i++) {
+		layout.push_back({ vec2(x + rowMove, y1), vec2(x + rowMove, y2), vec2(x + rowMove, y3), vec2(x + rowMove, y4), vec2(x + rowMove, y5), vec2(x + rowMove, y6) });
+		rowMove += rowMoveIncrement;
+	}
+
+
+
+
+	doorPos.push_back({ vec2(-225.0f, 55.0f), vec2(-225.0f, 15.0f) });	//Index 0, front right and left doors
+	doorPos.push_back({ vec2(220.0f, 55.0f), vec2(220.0f, 15.0f) });		//Index 1, rear right and left doors
+
+	wallPos = { vec2(-240.0f, 15.0f),vec2(-230.0f, 15.0f),  vec2(-220.0f, 15.0f),vec2(-45.0f, 15.0f),  vec2(-35.0f, 15.0f),vec2(-25.0f, 15.0f),  vec2(-15.0f, 15.0f),vec2(85.0f, 15.0f),  vec2(95.0f, 15.0f),vec2(215.0f, 15.0f), vec2(225.0f, 15.0f),vec2(250.0f, 15.0f),
+				vec2(-240.0f, 55.0f),vec2(-230.0f, 55.0f),  vec2(-220.0f, 55.0f),vec2(-45.0f, 55.0f),  vec2(-35.0f, 55.0f),vec2(-25.0f, 55.0f),  vec2(-15.0f, 55.0f),vec2(85.0f, 55.0f),  vec2(95.0f, 55.0f),vec2(215.0f, 55.0f), vec2(225.0f, 55.0f),vec2(250.0f, 55.0f) };
+}
+
+
 // Boeing 737-800 constructor
 // https://www.seatguru.com/airlines/Thomson_Airways/Thomson_Airways_Boeing_737-800.php
 Boeing737::Boeing737() {

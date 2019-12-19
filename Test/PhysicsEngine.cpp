@@ -39,7 +39,7 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 
 		// Initialising passenger information
 		vec2 tempInitPos = activePassengers[i].getInitPos();
-		float distanceCD = passengerRadius + activePassengers[i].getMaxSpeed() * doubleDt;
+		float distanceCD = passengerRadius + activePassengers[i].getCurrSpeed() * doubleDt;
 		bool tempIsAisleAligned = activePassengers[i].getIsYAlignedWithAisle();
 		bool tempIsWalkingRight = activePassengers[i].getIsWalkingRight();
 
@@ -58,9 +58,6 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 		if (tempInitPos.y == activePassengers[i].getAisleY()) {
 			activePassengers[i].setIsYAlignedWithAisle(true);
 		}
-
-		// TODO: collision detection needs some work, because there position is calculated before checks for overshooting
-		//		 happen, collisions may be detected even when they will not occur!
 
 		//Lines up passengers with the aisle
 		if (!tempIsAisleAligned) {

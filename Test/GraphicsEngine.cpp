@@ -203,9 +203,9 @@ void GraphicsEngine::display() {
 			// Display the current template name to the window
 			infoDisplay("Aircraft map: " + g_selectedAircraft.getTemplateName(), displayX, displayY + spacing*2);
 
-			infoDisplay(runtimeResultText + std::to_string(totalRuntime), displayX, displayY + spacing * 3);
+			infoDisplay("Total number of seats/passengers: " + std::to_string(totalPassengers), displayX, displayY + spacing * 3);
 
-			infoDisplay("Total number of seats/passengers: " + std::to_string(totalPassengers), displayX, displayY + spacing * 4);
+			infoDisplay(runtimeResultText + std::to_string(totalRuntime), displayX, displayY + spacing * 4);
 
 			if (isBoarded) {
 				infoDisplay("Average time to reach a seat (in seconds): " + std::to_string(g_PE.getAverageSeatedTime()), displayX, displayY + spacing * 5);

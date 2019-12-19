@@ -100,6 +100,8 @@ void ConsoleEngine::runConsoleEngine() {
 	// Initialise everything needed for the simulation
 	init();
 
+	int totalPassengers = c_activePassengers.size();
+
 	std::cout << "\nRunning the simulation!..." << std::endl;
 	clock_t startTimer = clock();
 	
@@ -110,6 +112,7 @@ void ConsoleEngine::runConsoleEngine() {
 	clock_t totalRuntime = clock();
 	std::cout << "All passengers are seated." << std::endl;
 	std::cout << "The algorithm used was: '" << c_currentAlgorithm << "' and the plane template was: '" << c_aircraftName << "'" << std::endl;
+	std::cout << "Total number of seats/passengers was: " + totalPassengers << std::endl;
 	std::cout << "Everyone is seated. The total runtime was (in seconds): " << (totalRuntime - startTimer) / (double)CLOCKS_PER_SEC << std::endl;
 	std::cout << "Everyone is seated. Average time to be seated was (in seconds): " << c_PE.getAverageSeatedTime() / (double)CLOCKS_PER_SEC << std::endl;
 }

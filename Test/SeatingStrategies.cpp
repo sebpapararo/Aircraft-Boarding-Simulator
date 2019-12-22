@@ -265,17 +265,6 @@ void SeatingStrategies::rowByRow(std::string &currentAlgorithm, int noOfRows, ve
 void SeatingStrategies::randomSeat(std::string &currentAlgorithm, int noOfRows, int noOfColumns, std::string aircraftName, vector<vector<vec2>> activeTemplate, vector<vector<vec2>> activeDoorPos, int actveDoorsSelect, vector<Passenger> &activePassengers, vector<float> aislePosY) {
 	currentAlgorithm = "Random";
 
-	vector<vec2> currDoor;
-	if (actveDoorsSelect == 1) {
-		currDoor.push_back(activeDoorPos[1][1]);
-	}
-	else if (actveDoorsSelect == 2) {
-		currDoor.push_back(activeDoorPos[0][1]);
-	}
-	else {
-		currDoor = { activeDoorPos[0][1], activeDoorPos[1][1] };
-	}
-
 	int count1 = 0;
 	int count2 = 0;
 	vector<int> numbers;

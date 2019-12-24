@@ -7,7 +7,7 @@ void SeatingStrategies::backToFront(std::string &currentAlgorithm, int noOfRows,
 	int count1 = 0;
 	int count2 = 0;
 
-	for (int i = 0; i < noOfRows; i++) {
+	for (int i = noOfRows-1; i > -1; i--) {
 		for (size_t j = 0; j < activeTemplate[i].size(); j++) {
 			Passenger *p;
 			

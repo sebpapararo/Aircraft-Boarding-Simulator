@@ -11,7 +11,7 @@ auto lastDelta = Time::now();
 auto currentDelta = Time::now();
 bool firstLoop = true;
 
-void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<Passenger> &activeSeatedPassengers, vector<float> aislePosY, double startTime) {
+void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<Passenger> &seatedPassengers, vector<float> aislePosY, double startTime) {
 
 	if (firstLoop) {
 		currentDelta = Time::now();
@@ -47,7 +47,7 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 		if (tempInitPos == activePassengers[i].getSeatPos()) {
 			totalSeatedTime += glutGet(GLUT_ELAPSED_TIME) - startTime;
 
-			activeSeatedPassengers.push_back(activePassengers[i]);
+			seatedPassengers.push_back(activePassengers[i]);
 			activePassengers.erase(activePassengers.begin() + i);
 			continue;
 		}
@@ -59,11 +59,13 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 			activePassengers[i].setIsYAlignedWithAisle(true);
 		}
 
-		//Lines up passengers with the aisle
+		//If passenger is not aligned with aisle
 		if (!tempIsAisleAligned) {
+			//If below an aisle
 			if (tempInitPos.y < activePassengers[i].getAisleY()) {											//If below aisle, walk up
 				vec2 newPos = tempInitPos + vec2(0.0f, activePassengers[i].accelerate() * doubleDt);
 
+				//If collision detection does not overshoot the aisle position
 				if (tempInitPos.y + distanceCD < activePassengers[i].getAisleY()) {
 
 					// checking each passenger for collision detection: 
@@ -157,18 +159,21 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 			else if ((tempInitPos.x - 2.0f) > activePassengers[i].getSeatPos().x) {	//If to the right of the row, walk left
 				vec2 newPos = tempInitPos + vec2(-activePassengers[i].accelerate() * doubleDt, 0.0f);
 				for (size_t j = 0; j < activePassengers.size(); j++) {	//Collision detection
-
+					//If passenger does not collide with other passenger
 					if (abs(newPos.x - activePassengers[j].getInitPos().x) < distanceCD && abs(newPos.y - activePassengers[j].getInitPos().y) < distanceCD &&
 						activePassengers[j].getIsYAlignedWithAisle() &&
 						i != j) {
+						//If passsenger is not walking in the same direction as other passenger
 						if (tempIsWalkingRight != activePassengers[j].getIsWalkingRight() && 
 							!activePassengers[j].getIsRowFound()) {
 							newPos = tempInitPos + vec2(-activePassengers[i].getCurrSpeed() * doubleDt / 4, 0.0f);
 							break;
 						}
+						//Else if passenger is to the left of other passenger
 						else if (tempInitPos.x < activePassengers[j].getInitPos().x) {
 							vec2 newPos = tempInitPos + vec2(-activePassengers[i].getCurrSpeed() * doubleDt, 0.0f);
 						}
+						//Else do not update position
 						else {
 							newPos = tempInitPos;
 						}
@@ -188,18 +193,11 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 			else {
 				activePassengers[i].setInitPos(vec2(activePassengers[i].getSeatPos().x, tempInitPos.y));
 				activePassengers[i].setIsRowFound(true);
-
-			// TODO: move this outside into seperate elseif 
-
-				if (activePassengers[i].getBaggageTimerStart() < 0) {	//Sets timer when passenger starts to enter the seat row
-					activePassengers[i].setIsRowFound(true);
-					activePassengers[i].setBaggageTimerStart(glutGet(GLUT_ELAPSED_TIME)); // TODO: implement system time, instead of 'GLUT time'
-				}
 			}
 		}
 		//When row found, walk up or down to get in the seat
 		else {
-			if (activePassengers[i].getBaggageTimerStart() < 0) {	//Sets timer when passenger starts to enter the seat row
+			if (activePassengers[i].getBaggageTimerStart() <= 0) {	//Sets timer when passenger starts to enter the seat row
 				activePassengers[i].setBaggageTimerStart(glutGet(GLUT_ELAPSED_TIME));
 			}
 			else if ((glutGet(GLUT_ELAPSED_TIME) - activePassengers[i].getBaggageTimerStart()) < 1000) {	//If passenger waits less than one second
@@ -236,7 +234,7 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 	}
 
 	if (activePassengers.empty()) {
-		averageSeatedTime = totalSeatedTime / 1000 / activeSeatedPassengers.size();
+		averageSeatedTime = totalSeatedTime / 1000 / seatedPassengers.size();
 	}
 }
 

@@ -1,23 +1,32 @@
 #include "GraphicsEngine.h"
 
 int zoom = 0;
+float displayX, displayY, spacing;
 
 int window = 0;
 bool isConsole = false;
 bool isBoarded = false;
 
+//Start screen
 bool isStarted = false;
 int menuSelect = 1;
 int strategySelect = 1;
+int actveDoorsSelect = 1;
 int mapSelect = 1;
 
-std::string strategiesList[] = { "Back-to-Front", "Seat-by-Seat", "Random", "Row-by-Row" };
-std::string mapList[] = { "AirbusA319", "Boeing737" };
+std::string strategiesList[] = { "Back-to-Front", "Inside-Out", "Outside-In", "Seat-by-Seat", "Random", "Row-by-Row" };
+std::string activeDoorsList[] = { "Rear", "Front", "Front and Rear" };
+std::string mapList[] = { "Airbus A319", "Airbus A321neo", "Airbus A380-800", "Boeing 737-800", "Boeing 767-300ER" };
 
 std::string setStrategyText = "--> Set boarding strategy: ";
+std::string setActiveDoorsTest = "Set active doors: ";
 std::string setMapText = "Set aircraft map: ";
+
 std::string selectedStrategyText = "Back-to-Front";
-std::string selectedMapText = "AirbusA319";
+std::string selectedDoorsText = "Rear";
+std::string selectedMapText = "Airbus A319";
+
+int totalPassengers = 0;
 
 int screenWidth = GetSystemMetrics(SM_CXSCREEN), screenHeight = GetSystemMetrics(SM_CYSCREEN);
 float aspect;
@@ -50,7 +59,7 @@ int g_noOfRows;
 int g_noOfColumns;
 vector<Passenger> g_activePassengers;
 vector<Passenger> g_activeSeatedPassengers;
-float g_aislePosY;
+vector<float> g_aislePosY;
 vector<vec2> g_activeWallPos;
 std::string g_currentAlgorithm;
 
@@ -70,13 +79,27 @@ void GraphicsEngine::init() {
 	startTime = glutGet(GLUT_ELAPSED_TIME);
 }
 
-void GraphicsEngine::initSettings(int strategy, int layout) {
+void GraphicsEngine::initSettings(int strategy, int layout, int doorConfig) {
 
 	if (layout == 1) {
 		g_selectedAircraft = AirbusA319();
+		zoom = 0.0f;
+	}
+	else if (layout == 2) {
+		g_selectedAircraft = AirbusA321neo();
+		zoom = 35.0f;
+	}
+	else if (layout == 3) {
+		g_selectedAircraft = AirbusA380_800();
+		zoom = 100.0f;
+	}
+	else if (layout == 4) {
+		g_selectedAircraft = Boeing737();
+		zoom = 10.0f;
 	}
 	else {
-		g_selectedAircraft = Boeing737();
+		g_selectedAircraft = Boeing767_300ER();
+		zoom = 60.0f;
 	}
 
 	g_aircraftName = g_selectedAircraft.getTemplateName();
@@ -88,19 +111,31 @@ void GraphicsEngine::initSettings(int strategy, int layout) {
 	g_activeSeatedPassengers.clear();
 	g_aislePosY = g_selectedAircraft.getAislePosY();
 	g_activeWallPos = g_selectedAircraft.getWallPos();
+	isBoarded = false;
 
 	if (strategy == 1) {
-		g_SS.backToFront(g_currentAlgorithm, g_noOfRows, g_activeTemplate, g_activeDoorPos, g_activePassengers);
+		g_SS.backToFront(g_currentAlgorithm, g_noOfRows, g_activeTemplate, g_activeDoorPos, doorConfig, g_activePassengers, g_aislePosY);
 	}
 	else if (strategy == 2) {
-		g_SS.seatBySeat(g_currentAlgorithm, g_noOfRows, g_noOfColumns, g_aircraftName, g_activeTemplate, g_activeDoorPos, g_activePassengers);
+		g_SS.insideOut(g_currentAlgorithm, g_noOfRows, g_activeTemplate, g_activeDoorPos, doorConfig, g_activePassengers, g_aislePosY);
 	}
 	else if (strategy == 3) {
-		g_SS.randomSeat(g_currentAlgorithm, g_noOfRows, g_noOfColumns, g_aircraftName, g_activeTemplate, g_activeDoorPos, g_activePassengers);
+		g_SS.outsideIn(g_currentAlgorithm, g_noOfRows, g_activeTemplate, g_activeDoorPos, doorConfig, g_activePassengers, g_aislePosY);
+	}
+	else if (strategy == 4) {
+		g_SS.seatBySeat(g_currentAlgorithm, g_noOfRows, g_noOfColumns, g_aircraftName, g_activeTemplate, g_activeDoorPos, doorConfig, g_activePassengers, g_aislePosY);
+	}
+	else if (strategy == 5) {
+		g_SS.randomSeat(g_currentAlgorithm, g_noOfRows, g_noOfColumns, g_aircraftName, g_activeTemplate, g_activeDoorPos, doorConfig, g_activePassengers, g_aislePosY);
 	}
 	else {
-		g_SS.rowByRow(g_currentAlgorithm, g_noOfRows, g_activeTemplate, g_activeDoorPos, g_activePassengers);
+		g_SS.rowByRow(g_currentAlgorithm, g_noOfRows, g_activeTemplate, g_activeDoorPos, doorConfig, g_activePassengers, g_aislePosY);
 	}
+
+	totalPassengers = g_activePassengers.size();
+
+	g_PE.resetDelta();
+	startTime = glutGet(GLUT_ELAPSED_TIME);
 }
 
 
@@ -116,14 +151,15 @@ void GraphicsEngine::display() {
 		infoDisplay("Please use the arrow keys to set simulation settings:", -150.0f, 20.0f);
 
 		infoDisplay(setStrategyText + selectedStrategyText, -150.0f, 0.0f);
-		infoDisplay(setMapText + selectedMapText, -150.0f, -10.0f);
+		infoDisplay(setActiveDoorsTest + selectedDoorsText, -150.0f, -10.0f);
+		infoDisplay(setMapText + selectedMapText, -150.0f, -20.0f);
 
-		infoDisplay("Press 'ENTER' to start the simulation.", -150.0f, -30.0f);
+		infoDisplay("Press 'ENTER' to start the simulation.", -150.0f, -40.0f);
 	}
 	//Simulation
 	else {
 		//Passenger navigation
-		g_PE.updatePositions(g_activePassengers, g_activeSeatedPassengers, g_aislePosY);
+		g_PE.updatePositions(g_activePassengers, g_activeSeatedPassengers, g_aislePosY, startTime);
 
 		if (!isConsole) {
 			//Draws seats
@@ -146,8 +182,11 @@ void GraphicsEngine::display() {
 			//Draws seeking passengers
 			for (size_t i = 0; i < g_activePassengers.size(); i++) {
 				vec2 tempInitPos = g_activePassengers[i].getInitPos();
-				float tempRotation = g_activePassengers[i].getRotation();
-				DO.loadObject(Passenger1, tempRotation, tempInitPos.x, tempInitPos.y, passengerHeight, passengerWidth, 1.0f, 1.0f, 1.0f, 1.0f);
+
+				if (g_activeDoorPos[1][1].y < tempInitPos.y && g_activeDoorPos[1][0].y > tempInitPos.y) {
+					float tempRotation = g_activePassengers[i].getRotation();
+					DO.loadObject(Passenger1, tempRotation, tempInitPos.x, tempInitPos.y, passengerHeight, passengerWidth, 1.0f, 1.0f, 1.0f, 1.0f);
+				}
 			}
 
 			//Draws seated passengerss
@@ -165,19 +204,30 @@ void GraphicsEngine::display() {
 
 		if (!isConsole) {
 			// Display the current algorithm to the window
-			infoDisplay("Boarding strategy: " + g_currentAlgorithm, -150.0f, -70.0f);
+			infoDisplay("Boarding strategy: " + g_currentAlgorithm, displayX, displayY);
+
+			infoDisplay("Active door(s): " + selectedDoorsText, displayX, displayY + spacing);
 
 			// Display the current template name to the window
-			infoDisplay("Aircraft map: " + g_selectedAircraft.getTemplateName(), -150.0f, -75.0f);
+			infoDisplay("Aircraft map: " + g_selectedAircraft.getTemplateName(), displayX, displayY + spacing*2);
 
-			infoDisplay(runtimeResultText + std::to_string(totalRuntime), -150.0f, -80.0f);
+			infoDisplay("Total number of seats/passengers: " + std::to_string(totalPassengers), displayX, displayY + spacing * 3);
+
+			infoDisplay(runtimeResultText + std::to_string(totalRuntime), displayX, displayY + spacing * 4);
+
+			if (isBoarded) {
+				infoDisplay("Average time to reach a seat (in seconds): " + std::to_string(g_PE.getAverageSeatedTime()), displayX, displayY + spacing * 5);
+			}
+			else {
+				infoDisplay("Average time to reach a seat (in seconds): running...", displayX, displayY + spacing * 5);
+			}
 		}
 
 		if (g_activePassengers.empty() && !isBoarded) {
 			isBoarded = true;
-			std::cout << "Boarding strategy: " + g_currentAlgorithm << std::endl;
+			/*std::cout << "Boarding strategy: " + g_currentAlgorithm << std::endl;
 			std::cout << "Aircraft map: " + g_selectedAircraft.getTemplateName() << std::endl;
-			std::cout << runtimeResultText + std::to_string(totalRuntime) << std::endl;
+			std::cout << runtimeResultText + std::to_string(totalRuntime) << std::endl;*/
 		}
 	}
 	glFlush();	//Render now
@@ -247,20 +297,45 @@ void GraphicsEngine::processKeys(unsigned char key, int x, int y) {	//Takes keyb
 	if (key == VK_RETURN) {
 		if (!isStarted) {
 			isStarted = true;
-			initSettings(strategySelect, mapSelect);
-			startTime = glutGet(GLUT_ELAPSED_TIME);
+			initSettings(strategySelect, mapSelect, actveDoorsSelect);
+			if (mapSelect == 1) {
+				displayX = -160.0f;
+				displayY = -30.0f;
+				spacing = -6.0f;
+			}
+			else if (mapSelect == 2) {
+				displayX = -220.0f;
+				displayY = -40.0f;
+				spacing = -8.0f;
+			}
+			else if (mapSelect == 3) {
+				displayX = -330.0f;
+				displayY = -50.0f;
+				spacing = -12.0f;
+			}
+			else if (mapSelect == 4) {
+				displayX = -180.0f;
+				displayY = -35.0f;
+				spacing = -7.0f;
+			}
+			else if (mapSelect == 5) {
+				displayX = -260.0f;
+				displayY = -50.0f;
+				spacing = -9.0f;
+			}
 		}
 		else {
 			isStarted = false;
+			zoom = 0;
 		}
 	}
 
-	if (key == '-') {
+	/*if (key == '-' && isZoom == true) {
 		zoom++;
 	}
-	if (key == '+') {
+	if (key == '+' && isZoom == true) {
 		zoom--;
-	}
+	}*/
 	
 }
 
@@ -270,11 +345,19 @@ void GraphicsEngine::processSpecialKeys(int key, int x, int y) {
 			if (menuSelect == 2) {
 				menuSelect--;
 				setStrategyText = "--> Set boarding strategy: ";
+				setActiveDoorsTest = "Set active doors: ";
+				setMapText = "Set aircraft map: ";
+			}
+			else if (menuSelect == 3) {
+				menuSelect--;
+				setStrategyText = "Set boarding strategy: ";
+				setActiveDoorsTest = "--> Set active doors: ";
 				setMapText = "Set aircraft map: ";
 			}
 			else {
-				menuSelect++;
+				menuSelect = 3;
 				setStrategyText = "Set boarding strategy: ";
+				setActiveDoorsTest = "Set active doors: ";
 				setMapText = "--> Set aircraft map: ";
 			}
 		}
@@ -282,25 +365,40 @@ void GraphicsEngine::processSpecialKeys(int key, int x, int y) {
 			if (menuSelect == 1) {
 				menuSelect++;
 				setStrategyText = "Set boarding strategy: ";
+				setActiveDoorsTest = "--> Set active doors: ";
+				setMapText = "Set aircraft map: ";
+			}
+			else if (menuSelect == 2) {
+				menuSelect++;
+				setStrategyText = "Set boarding strategy: ";
+				setActiveDoorsTest = "Set active doors: ";
 				setMapText = "--> Set aircraft map: ";
 			}
 			else {
-				menuSelect--;
+				menuSelect = 1;
 				setStrategyText = "--> Set boarding strategy: ";
+				setActiveDoorsTest = "Set active doors: ";
 				setMapText = "Set aircraft map: ";
 			}
 		}
 		else if (key == GLUT_KEY_RIGHT) {
 			if (menuSelect == 1) {
 				strategySelect++;
-				if (strategySelect > 4) {
+				if (strategySelect > (sizeof(strategiesList) / sizeof(strategiesList[0]))) {
 					strategySelect = 1;
 				}
 				selectedStrategyText = strategiesList[strategySelect - 1];
 			}
 			else if (menuSelect == 2) {
+				actveDoorsSelect++;
+				if (actveDoorsSelect > (sizeof(activeDoorsList) / sizeof(activeDoorsList[0]))) {
+					actveDoorsSelect = 1;
+				}
+				selectedDoorsText = activeDoorsList[actveDoorsSelect - 1];
+			}
+			else if (menuSelect == 3) {
 				mapSelect++;
-				if (mapSelect > 2) {
+				if (mapSelect > (sizeof(mapList) / sizeof(mapList[0]))) {
 					mapSelect = 1;
 				}
 				selectedMapText = mapList[mapSelect - 1];
@@ -310,14 +408,21 @@ void GraphicsEngine::processSpecialKeys(int key, int x, int y) {
 			if (menuSelect == 1) {
 				strategySelect--;
 				if (strategySelect < 1) {
-					strategySelect = 4;
+					strategySelect = (sizeof(strategiesList) / sizeof(strategiesList[0]));
 				}
 				selectedStrategyText = strategiesList[strategySelect - 1];
 			}
 			else if (menuSelect == 2) {
+				actveDoorsSelect--;
+				if (actveDoorsSelect < 1) {
+					actveDoorsSelect = (sizeof(activeDoorsList) / sizeof(activeDoorsList[0]));
+				}
+				selectedDoorsText = activeDoorsList[actveDoorsSelect - 1];
+			}
+			else if (menuSelect == 3) {
 				mapSelect--;
 				if (mapSelect < 1) {
-					mapSelect = 2;
+					mapSelect = (sizeof(mapList) / sizeof(mapList[0]));
 				}
 				selectedMapText = mapList[mapSelect - 1];
 			}

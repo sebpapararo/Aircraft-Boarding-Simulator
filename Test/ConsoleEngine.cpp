@@ -72,6 +72,7 @@ void ConsoleEngine::init() {
 		std::cin >> algorithmChoice;
 	}
 
+	// Ask the user what doors to use for boarding
 	int activeDoorsChoice;
 	std::cout << "\nWhich aircraft doors would you like to use?" << std::endl;
 	std::cout << "Rear (1), Front (2), Front and Rear (3)" << std::endl;
@@ -109,7 +110,7 @@ void ConsoleEngine::init() {
 
 void ConsoleEngine::runConsoleEngine() {
 
-	// Initialise everything needed for the simulation
+	// Initialise simulation parameters via user inputs
 	init();
 
 	int totalPassengers = c_activePassengers.size();
@@ -117,10 +118,12 @@ void ConsoleEngine::runConsoleEngine() {
 	std::cout << "\nRunning the simulation!..." << std::endl;
 	clock_t startTimer = clock();
 	
+	//Runs the simulation until all passengers are seated
 	while (!c_activePassengers.empty()) {
 		c_PE.updatePositions(c_activePassengers, c_activeSeatedPassengers, c_aislePosY, startTimer);
 	}
-		
+	
+	//Displays simulation results
 	clock_t totalRuntime = clock();
 	std::cout << "All passengers are seated." << std::endl;
 	std::cout << "The algorithm used was: '" << c_currentAlgorithm << "' and the plane template was: '" << c_aircraftName << "'" << std::endl;

@@ -1,17 +1,14 @@
 #include "SeatingStrategies.h"
 
-// TODO: Needs to be completely rewritten to include zones otherwise it is just the same as row by row but backwards
 void SeatingStrategies::backToFront(std::string &currentAlgorithm, int noOfRows, vector<vector<vec2>> activeTemplate, vector<vector<vec2>> activeDoorPos, int actveDoorsSelect, vector<Passenger> &activePassengers, vector<float> aislePosY) {
 	currentAlgorithm = "Back-To-Front";
-	//int count = 0;
 	int count1 = 0;
 	int count2 = 0;
 
 	for (int i = noOfRows-1; i > -1; i--) {
-		for (size_t j = 0; j < activeTemplate[i].size(); j++) {
+		int atSize = activeTemplate[i].size();
+		for (size_t j = 0; j < atSize; j++) {
 			Passenger *p;
-			
-			//p = new Passenger(activeTemplate[i][j], activeDoorPos[1][1] + vec2(0.0f, (-10.0f * count)), false);	//Sets seat and starting positions
 			
 			if (actveDoorsSelect == 1) {
 				p = new Passenger(activeTemplate[i][j], activeDoorPos[1][1] + vec2(0.0f, (-10.0f * count1)), false);	//Passengers enter through rear-left door
@@ -32,16 +29,13 @@ void SeatingStrategies::backToFront(std::string &currentAlgorithm, int noOfRows,
 				}
 			}
 
-
 			if (j > (activeTemplate[i].size() / 2) - 1 && aislePosY.size() > 1) {
 				p->setAisleY(aislePosY[1]);
 			}
 			else {
 				p->setAisleY(aislePosY[0]);
 			}
-
 			activePassengers.push_back(*p);
-			//count++;
 		}
 	}
 }
@@ -52,7 +46,8 @@ void SeatingStrategies::insideOut(std::string &currentAlgorithm, int noOfRows, v
 	int count2 = 0;
 
 	for (int i = (noOfRows / 2) - 1; i > -1; i--) {
-		for (size_t j = 0; j < activeTemplate[i].size(); j++) {
+		int atSize = activeTemplate[i].size();
+		for (size_t j = 0; j < atSize; j++) {
 			Passenger *p;
 
 			if (actveDoorsSelect == 1) {
@@ -68,20 +63,19 @@ void SeatingStrategies::insideOut(std::string &currentAlgorithm, int noOfRows, v
 				count1++;
 			}
 
-
 			if (j > (activeTemplate[i].size() / 2) - 1 && aislePosY.size() > 1) {
 				p->setAisleY(aislePosY[1]);
 			}
 			else {
 				p->setAisleY(aislePosY[0]);
 			}
-
 			activePassengers.push_back(*p);
 		}
 	}
 
 	for (int i = noOfRows / 2; i < noOfRows; i++) {
-		for (size_t j = 0; j < activeTemplate[i].size(); j++) {
+		int atSize = activeTemplate[i].size();
+		for (size_t j = 0; j < atSize; j++) {
 			Passenger *p;
 
 			if (actveDoorsSelect == 1) {
@@ -97,14 +91,12 @@ void SeatingStrategies::insideOut(std::string &currentAlgorithm, int noOfRows, v
 				count2++;
 			}
 
-
 			if (j > (activeTemplate[i].size() / 2) - 1 && aislePosY.size() > 1) {
 				p->setAisleY(aislePosY[1]);
 			}
 			else {
 				p->setAisleY(aislePosY[0]);
 			}
-
 			activePassengers.push_back(*p);
 		}
 	}
@@ -116,7 +108,8 @@ void SeatingStrategies::outsideIn(std::string &currentAlgorithm, int noOfRows, v
 	int count2 = 0;
 
 	for (int i = 0; i < (noOfRows/2); i++) {
-		for (size_t j = 0; j < activeTemplate[i].size(); j++) {
+		int atSize = activeTemplate[i].size();
+		for (size_t j = 0; j < atSize; j++) {
 			Passenger *p;
 
 			if (actveDoorsSelect == 1) {
@@ -132,20 +125,19 @@ void SeatingStrategies::outsideIn(std::string &currentAlgorithm, int noOfRows, v
 				count1++;
 			}
 
-
 			if (j > (activeTemplate[i].size() / 2) - 1 && aislePosY.size() > 1) {
 				p->setAisleY(aislePosY[1]);
 			}
 			else {
 				p->setAisleY(aislePosY[0]);
 			}
-
 			activePassengers.push_back(*p);
 		}
 	}
 
 	for (int i = noOfRows-1; i > noOfRows/2-1; i--) {
-		for (size_t j = 0; j < activeTemplate[i].size(); j++) {
+		int atSize = activeTemplate[i].size();
+		for (size_t j = 0; j < atSize; j++) {
 			Passenger *p;
 
 			if (actveDoorsSelect == 1) {
@@ -161,20 +153,17 @@ void SeatingStrategies::outsideIn(std::string &currentAlgorithm, int noOfRows, v
 				count2++;
 			}
 
-
 			if (j > (activeTemplate[i].size() / 2) - 1 && aislePosY.size() > 1) {
 				p->setAisleY(aislePosY[1]);
 			}
 			else {
 				p->setAisleY(aislePosY[0]);
 			}
-
 			activePassengers.push_back(*p);
 		}
 	}
 }
 
-// TODO: maybe change it so it treats the first row as part of the last 3 columns instead of the first 3
 void SeatingStrategies::seatBySeat(std::string &currentAlgorithm, int noOfRows, int noOfColumns, std::string aircraftName, vector<vector<vec2>> activeTemplate, vector<vector<vec2>> activeDoorPos, int actveDoorsSelect, vector<Passenger> &activePassengers, vector<float> aislePosY) {
 	currentAlgorithm = "Seat-By-Seat";
 	int count1 = 0;
@@ -187,7 +176,6 @@ void SeatingStrategies::seatBySeat(std::string &currentAlgorithm, int noOfRows, 
 			}
 
 			Passenger *p;
-			//p = new Passenger(activeTemplate[j][i], activeDoorPos[1][1] + vec2(0.0f, (-10.0f * count)), false);	//Sets seat and starting positions
 
 			if (actveDoorsSelect == 1) {
 				p = new Passenger(activeTemplate[j][i], activeDoorPos[1][1] + vec2(0.0f, (-10.0f * count1)), false);	//Passengers enter through rear-left door
@@ -214,9 +202,7 @@ void SeatingStrategies::seatBySeat(std::string &currentAlgorithm, int noOfRows, 
 			else {
 				p->setAisleY(aislePosY[0]);
 			}
-
 			activePassengers.push_back(*p);
-			//count++;
 		}
 	}
 }
@@ -226,9 +212,9 @@ void SeatingStrategies::rowByRow(std::string &currentAlgorithm, int noOfRows, ve
 	int count1 = 0;
 	int count2 = 0;
 	for (int i = 0; i < noOfRows; i++) {
-		for (size_t j = 0; j < activeTemplate[i].size(); j++) {
+		int atSize = activeTemplate[i].size();
+		for (size_t j = 0; j < atSize; j++) {
 			Passenger *p;
-			//p = new Passenger(activeTemplate[i][j], activeDoorPos[1][1] + vec2(0.0f, (-10.0f * count)), false);	//Sets seat and starting positions
 			
 			if (actveDoorsSelect == 1) {
 				p = new Passenger(activeTemplate[i][j], activeDoorPos[1][1] + vec2(0.0f, (-10.0f * count1)), false);	//Passengers enter through rear-left door
@@ -255,9 +241,7 @@ void SeatingStrategies::rowByRow(std::string &currentAlgorithm, int noOfRows, ve
 			else {
 				p->setAisleY(aislePosY[0]);
 			}
-
 			activePassengers.push_back(*p);
-			//count++;
 		}
 	}
 }
@@ -273,7 +257,8 @@ void SeatingStrategies::randomSeat(std::string &currentAlgorithm, int noOfRows, 
 	std::random_shuffle(activeTemplate.begin(), activeTemplate.end());
 
 	for (int i = 0; i < noOfRows; i++) {
-		for (int j = 0; j < activeTemplate[i].size(); j++) {
+		int atSize = activeTemplate[i].size();
+		for (int j = 0; j < atSize; j++) {
 			Passenger *p;
 
 			if (actveDoorsSelect == 1) {
@@ -301,7 +286,6 @@ void SeatingStrategies::randomSeat(std::string &currentAlgorithm, int noOfRows, 
 			else {
 				p->setAisleY(aislePosY[0]);
 			}
-
 			activePassengers.push_back(*p);
 		}
 	}

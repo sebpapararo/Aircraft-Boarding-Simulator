@@ -14,6 +14,7 @@ int strategySelect = 1;
 int actveDoorsSelect = 1;
 int mapSelect = 1;
 
+//Interactive settings text
 std::string strategiesList[] = { "Back-to-Front", "Inside-Out", "Outside-In", "Seat-by-Seat", "Random", "Row-by-Row" };
 std::string activeDoorsList[] = { "Rear", "Front", "Front and Rear" };
 std::string mapList[] = { "Airbus A319", "Airbus A321neo", "Airbus A380-800", "Boeing 737-800", "Boeing 767-300ER" };
@@ -79,6 +80,7 @@ void GraphicsEngine::init() {
 	startTime = glutGet(GLUT_ELAPSED_TIME);
 }
 
+//Initializes simulation parameters based on user choice
 void GraphicsEngine::initSettings(int strategy, int layout, int doorConfig) {
 
 	if (layout == 1) {
@@ -138,7 +140,7 @@ void GraphicsEngine::initSettings(int strategy, int layout, int doorConfig) {
 	startTime = glutGet(GLUT_ELAPSED_TIME);
 }
 
-
+//The method is run every frame to let the user set settings, run the simulation and render passengers
 void GraphicsEngine::display() {
 	reshape(screenWidth, screenHeight);
 
@@ -202,13 +204,12 @@ void GraphicsEngine::display() {
 			totalRuntime = (endTime - startTime) / 1000;
 		}
 
+		//Displays simulation info and results
 		if (!isConsole) {
-			// Display the current algorithm to the window
 			infoDisplay("Boarding strategy: " + g_currentAlgorithm, displayX, displayY);
 
 			infoDisplay("Active door(s): " + selectedDoorsText, displayX, displayY + spacing);
 
-			// Display the current template name to the window
 			infoDisplay("Aircraft map: " + g_selectedAircraft.getTemplateName(), displayX, displayY + spacing*2);
 
 			infoDisplay("Total number of seats/passengers: " + std::to_string(totalPassengers), displayX, displayY + spacing * 3);
@@ -250,26 +251,6 @@ void GraphicsEngine::FPSLock(int FPSCap) {
 }
 
 
-////Not working yet
-//void GraphicsEngine::displayFPS() {
-//	static float tempFPS = 0.0f;
-//	static float lastTime = 0.0f;	//Holds time from last frame
-//	float currentTime = GetTickCount() * 0.001f;
-//	++tempFPS;
-//
-//	if (currentTime - lastTime > 1.0f)
-//	{
-//		lastTime = currentTime;
-//		FPS = tempFPS;
-//		infoDisplay("FPS: " + std::to_string(FPS), -150.0f, 60.0f);
-//		//FPS = 0.0f;
-//	}
-//	else {
-//		infoDisplay("FPS: " + std::to_string(FPS- tempFPS), -150.0f, 60.0f);
-//	}
-//}
-
-
 //Displays the current lap the player is on
 void GraphicsEngine::infoDisplay(std::string outputString, float posX, float posY) {
 	std::string aString = outputString;
@@ -283,6 +264,7 @@ void GraphicsEngine::infoDisplay(std::string outputString, float posX, float pos
 		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, string[i]);
 	}
 }
+
 
 void GraphicsEngine::processKeys(unsigned char key, int x, int y) {	//Takes keyboard input
 	if (key == VK_ESCAPE) {	//Escape key closes the application
@@ -329,13 +311,6 @@ void GraphicsEngine::processKeys(unsigned char key, int x, int y) {	//Takes keyb
 			zoom = 0;
 		}
 	}
-
-	/*if (key == '-' && isZoom == true) {
-		zoom++;
-	}
-	if (key == '+' && isZoom == true) {
-		zoom--;
-	}*/
 	
 }
 

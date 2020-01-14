@@ -50,11 +50,11 @@ float Passenger::accelerate() {
 		return currSpeed;
 	}
 }
-float Passenger::decelerate() {
-	if (currSpeed > 0.0f) {
+float Passenger::decelerateToSlow() {
+	if (currSpeed > maxSpeed / 4) {
 		currSpeed -= 2.0f;
-		if (currSpeed < 0.0f) {
-			currSpeed = 0.0f;
+		if (currSpeed < maxSpeed / 4) {
+			currSpeed = maxSpeed / 4;
 		}
 		return currSpeed;
 	}

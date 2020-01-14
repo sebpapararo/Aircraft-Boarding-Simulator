@@ -18,7 +18,7 @@ public:
 	float getCurrSpeed() const;
 	void setCurrSpeed(float speed);
 	float accelerate();
-	float decelerate();
+	float decelerateToSlow();
 	float stop();
 
 	bool getIsWalkingRight() const;

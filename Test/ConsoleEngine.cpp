@@ -12,6 +12,7 @@ vector<Passenger> c_activeSeatedPassengers;
 vector<float> c_aislePosY;
 vector<vec2> c_activeWallPos;
 std::string c_currentAlgorithm;
+int simSpeed;
 
 PhysicsEngine c_PE;
 SeatingStrategies c_SS;
@@ -106,28 +107,40 @@ void ConsoleEngine::init() {
 			c_SS.rowByRow(c_currentAlgorithm, c_noOfRows, c_activeTemplate, c_activeDoorPos, activeDoorsChoice, c_activePassengers, c_aislePosY);
 			break;
 	}
+
+	// Ask the user what doors to use for boarding
+	std::cout << "\nWhat speed would you like to run the simulation at?" << std::endl;
+	std::cout << "Enter a number from 1 to 10 (1 is real life speed): ";
+	std::cin >> simSpeed;
+
+	// Let the user try again if entered an invalid number
+	while (simSpeed < 1 || simSpeed > 10) {
+		std::cout << "Invalid number. Enter a speed from 1 to 10: ";
+		std::cin >> simSpeed;
+	}
+
+	c_PE.setSimSpeed(simSpeed);
+	
 }
 
 void ConsoleEngine::runConsoleEngine() {
 
 	// Initialise simulation parameters via user inputs
 	init();
+    int totalPassengers = c_activePassengers.size();
 
-	int totalPassengers = c_activePassengers.size();
-
-	std::cout << "\nRunning the simulation!..." << std::endl;
-	clock_t startTimer = clock();
+	std::cout << "\nStarting the simulation..." << std::endl;
+	auto startTime = std::chrono::high_resolution_clock::now();
 	
 	//Runs the simulation until all passengers are seated
 	while (!c_activePassengers.empty()) {
-		c_PE.updatePositions(c_activePassengers, c_activeSeatedPassengers, c_aislePosY, startTimer);
+		c_PE.updatePositions(c_activePassengers, c_activeSeatedPassengers, c_aislePosY, startTime, totalPassengers);
 	}
-	
-	//Displays simulation results
-	clock_t totalRuntime = clock();
-	std::cout << "All passengers are seated." << std::endl;
+		
+	auto endTime = std::chrono::high_resolution_clock::now();
+	std::cout << "\nAll passengers are seated." << std::endl;
 	std::cout << "The algorithm used was: '" << c_currentAlgorithm << "' and the plane template was: '" << c_aircraftName << "'" << std::endl;
-	std::cout << "Total number of seats/passengers was: " + totalPassengers << std::endl;
-	std::cout << "Everyone is seated. The total runtime was (in seconds): " << (totalRuntime - startTimer) / (double)CLOCKS_PER_SEC << std::endl;
-	std::cout << "Everyone is seated. Average time to be seated was (in seconds): " << c_PE.getAverageSeatedTime() / (double)CLOCKS_PER_SEC << std::endl;
+    std::cout << "Total number of seats/passengers was: " + totalPassengers << std::endl;
+	std::cout << "Everyone is seated. The total runtime was (in seconds): " << std::chrono::duration<double>(endTime - startTime).count() * c_PE.getSimSpeed() << std::endl;
+	std::cout << "Everyone is seated. Average time per passenger to be seated was (in seconds): " << c_PE.getAverageSeatedTime() * c_PE.getSimSpeed() << std::endl;
 }

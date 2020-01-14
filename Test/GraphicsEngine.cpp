@@ -37,9 +37,9 @@ bool isPressed = false;
 //FPS and runtime timing
 int FPSCap = 60;
 float FPS = 0.0f;
-double startTime;
-double totalRuntime;
-const char* runtimeResultText = "Total runtime (in seconds): ";
+std::chrono::steady_clock::time_point startTime;
+std::chrono::duration<double, std::milli> totalRuntime;
+const char* runtimeResultText = "Simulation runtime (in seconds): ";
 
 //Texture/shape parameters
 DrawObjects DO;
@@ -76,8 +76,6 @@ void GraphicsEngine::init() {
 	reshape(screenWidth, screenHeight);
 
 	Passenger1 = DO.loadPNG(passenger1Path);
-
-	startTime = glutGet(GLUT_ELAPSED_TIME);
 }
 
 //Initializes simulation parameters based on user choice
@@ -137,7 +135,7 @@ void GraphicsEngine::initSettings(int strategy, int layout, int doorConfig) {
 	totalPassengers = g_activePassengers.size();
 
 	g_PE.resetDelta();
-	startTime = glutGet(GLUT_ELAPSED_TIME);
+	startTime = std::chrono::high_resolution_clock::now();
 }
 
 //The method is run every frame to let the user set settings, run the simulation and render passengers
@@ -161,8 +159,15 @@ void GraphicsEngine::display() {
 	//Simulation
 	else {
 		//Passenger navigation
-		g_PE.updatePositions(g_activePassengers, g_activeSeatedPassengers, g_aislePosY, startTime);
+		g_PE.updatePositions(g_activePassengers, g_activeSeatedPassengers, g_aislePosY, startTime, totalPassengers);
 
+		//Runtime timing
+		if (!g_activePassengers.empty()) {
+			auto endTime = std::chrono::high_resolution_clock::now();;
+			PhysicsEngine PE;
+			totalRuntime = (endTime - startTime) / 1000 * PE.getSimSpeed();
+		}
+		
 		if (!isConsole) {
 			//Draws seats
 			for (int i = 0; i < g_noOfRows; i++) {
@@ -198,12 +203,6 @@ void GraphicsEngine::display() {
 			}
 		}
 
-		//Runtime timing
-		if (!g_activePassengers.empty()) {
-			double endTime = glutGet(GLUT_ELAPSED_TIME);
-			totalRuntime = (endTime - startTime) / 1000;
-		}
-
 		//Displays simulation info and results
 		if (!isConsole) {
 			infoDisplay("Boarding strategy: " + g_currentAlgorithm, displayX, displayY);
@@ -214,13 +213,15 @@ void GraphicsEngine::display() {
 
 			infoDisplay("Total number of seats/passengers: " + std::to_string(totalPassengers), displayX, displayY + spacing * 3);
 
-			infoDisplay(runtimeResultText + std::to_string(totalRuntime), displayX, displayY + spacing * 4);
+			infoDisplay(runtimeResultText + std::to_string(totalRuntime.count()), displayX, displayY + spacing * 4);
 
 			if (isBoarded) {
-				infoDisplay("Average time to reach a seat (in seconds): " + std::to_string(g_PE.getAverageSeatedTime()), displayX, displayY + spacing * 5);
+				
+				infoDisplay("Average time per passenger to reach a seat (in seconds): " + std::to_string(g_PE.getAverageSeatedTime() * g_PE.getSimSpeed()), displayX, displayY + spacing * 5);
 			}
 			else {
-				infoDisplay("Average time to reach a seat (in seconds): running...", displayX, displayY + spacing * 5);
+				infoDisplay("Average time per passenger to reach a seat (in seconds): running...", displayX, displayY + spacing * 5);
+				infoDisplay("Average time per passenger to reach a seat (in seconds): running...", displayX, displayY + spacing * 5);
 			}
 		}
 
@@ -228,6 +229,7 @@ void GraphicsEngine::display() {
 			isBoarded = true;
 			/*std::cout << "Boarding strategy: " + g_currentAlgorithm << std::endl;
 			std::cout << "Aircraft map: " + g_selectedAircraft.getTemplateName() << std::endl;
+			std::cout << runtimeResultText + std::to_string(totalRuntime.count()) << std::endl;
 			std::cout << runtimeResultText + std::to_string(totalRuntime) << std::endl;*/
 		}
 	}
@@ -305,6 +307,8 @@ void GraphicsEngine::processKeys(unsigned char key, int x, int y) {	//Takes keyb
 				displayY = -50.0f;
 				spacing = -9.0f;
 			}
+			startTime = std::chrono::high_resolution_clock::now();
+			}
 		}
 		else {
 			isStarted = false;
@@ -312,7 +316,6 @@ void GraphicsEngine::processKeys(unsigned char key, int x, int y) {	//Takes keyb
 		}
 	}
 	
-}
 
 void GraphicsEngine::processSpecialKeys(int key, int x, int y) {
 	if (!isStarted) {
@@ -430,7 +433,7 @@ void GraphicsEngine::runGraphicsEngine(int argc, char** argv) {
 
 	init();
 
-	std::cout << "\nRunning the simulation..." << std::endl;
+	std::cout << "\nStarting the simulation..." << std::endl;
 	glutDisplayFunc(display);							// Register display callback handler for window re-paint
 	glutMainLoop();
 }

@@ -12,6 +12,7 @@ vector<Passenger> c_activeSeatedPassengers;
 vector<float> c_aislePosY;
 vector<vec2> c_activeWallPos;
 std::string c_currentAlgorithm;
+int simSpeed;
 
 PhysicsEngine c_PE;
 SeatingStrategies c_SS;
@@ -106,6 +107,20 @@ void ConsoleEngine::init() {
 			c_SS.rowByRow(c_currentAlgorithm, c_noOfRows, c_activeTemplate, c_activeDoorPos, activeDoorsChoice, c_activePassengers, c_aislePosY);
 			break;
 	}
+
+	// Ask the user what doors to use for boarding
+	std::cout << "\nWhat speed would you like to run the simulation at?" << std::endl;
+	std::cout << "Enter a number from 1 to 10 (1 is real life speed): ";
+	std::cin >> simSpeed;
+
+	// Let the user try again if entered an invalid number
+	while (simSpeed < 1 || simSpeed > 10) {
+		std::cout << "Invalid number. Enter a speed from 1 to 10: ";
+		std::cin >> simSpeed;
+	}
+
+	c_PE.setSimSpeed(simSpeed);
+	
 }
 
 void ConsoleEngine::runConsoleEngine() {

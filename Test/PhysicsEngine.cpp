@@ -20,7 +20,6 @@ void PhysicsEngine::setSimSpeed(double speed) {
 	simSpeed = speed;
 }
 
-
 void PhysicsEngine::seatedPassengerPercentage(vector<Passenger> &activeSeatedPassengers, int noOfPassengers) {
 	if (activeSeatedPassengers.size() == static_cast<int>(noOfPassengers * 0.2)) {
 		std::cout << "20% of passengers are now seated!" << std::endl;
@@ -37,7 +36,6 @@ void PhysicsEngine::seatedPassengerPercentage(vector<Passenger> &activeSeatedPas
 }
 
 
-//void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<Passenger> &activeSeatedPassengers, float aislePosY) {
 void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<Passenger> & activeSeatedPassengers, vector<float> aislePosY, std::chrono::steady_clock::time_point startTime, int noOfPassengers) {
 
 	//on first iteration only initialise delta time

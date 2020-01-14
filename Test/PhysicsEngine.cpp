@@ -251,5 +251,5 @@ double PhysicsEngine::getAverageSeatedTime() {
 
 void PhysicsEngine::resetDelta() {
 	lastDelta = Time::now();
-	currentDelta = Time::now();
+	currentDelta = lastDelta;
 }

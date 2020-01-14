@@ -9,7 +9,7 @@ using std::vector;
 
 class PhysicsEngine {
 private:
-	double simSpeed = 10;
+	double simSpeed = 1;
     double totalSeatedTime = 0.0f;
 	double averageSeatedTime = 0.0f;
     float passengerRadius = 2.0f;	//Collision detection
@@ -17,7 +17,6 @@ private:
 public:
 	double getSimSpeed();
 	void setSimSpeed(double speed);
-    //void updatePositions(vector<Passenger> &activePassengers, vector<Passenger> &activeSeatedPassengers, float aislePosY);
 	void updatePositions(vector<Passenger> &activePassengers, vector<Passenger> &activeSeatedPassengers, vector<float> aislePosY, std::chrono::steady_clock::time_point startTime, int noOfPassengers);
 	double getAverageSeatedTime();
 	void resetDelta();

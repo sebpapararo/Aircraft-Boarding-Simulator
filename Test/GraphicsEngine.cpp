@@ -161,6 +161,13 @@ void GraphicsEngine::display() {
 		//Passenger navigation
 		g_PE.updatePositions(g_activePassengers, g_activeSeatedPassengers, g_aislePosY, startTime, totalPassengers);
 
+		//Runtime timing
+		if (!g_activePassengers.empty()) {
+			auto endTime = std::chrono::high_resolution_clock::now();;
+			PhysicsEngine PE;
+			totalRuntime = (endTime - startTime) / 1000 * PE.getSimSpeed();
+		}
+		
 		if (!isConsole) {
 			//Draws seats
 			for (int i = 0; i < g_noOfRows; i++) {
@@ -196,13 +203,6 @@ void GraphicsEngine::display() {
 			}
 		}
 
-		//Runtime timing
-		if (!g_activePassengers.empty()) {
-			auto endTime = std::chrono::high_resolution_clock::now();;
-			PhysicsEngine PE;
-			totalRuntime = (endTime - startTime) / 1000 * PE.getSimSpeed();
-		} 
-
 		//Displays simulation info and results
 		if (!isConsole) {
 			infoDisplay("Boarding strategy: " + g_currentAlgorithm, displayX, displayY);
@@ -220,6 +220,7 @@ void GraphicsEngine::display() {
 				infoDisplay("Average time per passenger to reach a seat (in seconds): " + std::to_string(g_PE.getAverageSeatedTime() * g_PE.getSimSpeed()), displayX, displayY + spacing * 5);
 			}
 			else {
+				infoDisplay("Average time per passenger to reach a seat (in seconds): running...", displayX, displayY + spacing * 5);
 				infoDisplay("Average time per passenger to reach a seat (in seconds): running...", displayX, displayY + spacing * 5);
 			}
 		}
@@ -280,7 +281,6 @@ void GraphicsEngine::processKeys(unsigned char key, int x, int y) {	//Takes keyb
 	if (key == VK_RETURN) {
 		if (!isStarted) {
 			isStarted = true;
-			startTime = std::chrono::high_resolution_clock::now();
 			initSettings(strategySelect, mapSelect, actveDoorsSelect);
 			if (mapSelect == 1) {
 				displayX = -160.0f;
@@ -307,6 +307,7 @@ void GraphicsEngine::processKeys(unsigned char key, int x, int y) {	//Takes keyb
 				displayY = -50.0f;
 				spacing = -9.0f;
 			}
+			startTime = std::chrono::high_resolution_clock::now();
 			}
 		}
 		else {

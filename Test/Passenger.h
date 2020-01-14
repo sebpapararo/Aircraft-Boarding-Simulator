@@ -10,8 +10,17 @@ public:
 	void setSeatPos(vec2 pos);
 	vec2 getInitPos() const;
 	void setInitPos(vec2 init);
-	float getWalkingSpeed() const;
-	void setWalkingSpeed(float speed);
+	float getAisleY() const;
+	void setAisleY(float y);
+
+	float getMaxSpeed() const;
+	void setMaxSpeed(float speed);
+	float getCurrSpeed() const;
+	void setCurrSpeed(float speed);
+	float accelerate();
+	float decelerate();
+	float stop();
+
 	bool getIsWalkingRight() const;
 	void setIsWalkingRight(bool isRight);
 	bool getIsYAlignedWithAisle() const;
@@ -26,8 +35,10 @@ public:
 private:
 	vec2 seatPos;
 	vec2 initPos;
+	float aisleY;
 	// 12 is equivalent to 1 meter per second
-	float walkingSpeed = 12.0f;
+	float maxSpeed = 12.0f;
+	float currSpeed = 0.0f;
 	bool isYAlignedWithAisle = false;
 	bool isRowFound = false;
 	float baggageTimerStart;

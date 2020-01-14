@@ -104,9 +104,8 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 						int yd = activePassengers[j].getInitPos().y - newPos.y;
 
 						// if passenger is in the way, do not update position
-						if (activePassengers[j].getInitPos().y > tempInitPos.y && sqrt(xd*xd + yd + yd) < distanceCD) {
-							newPos -= vec2(0.0f, activePassengers[i].getCurrSpeed() * doubleDt * simSpeed);
-							activePassengers[i].decelerate()* simSpeed;
+						if (activePassengers[j].getInitPos().y > tempInitPos.y && sqrt(xd * xd + yd + yd) < distanceCD) {
+							newPos -= vec2(0.0f, activePassengers[i].stop() * doubleDt * simSpeed);
 							break;
 						}
 					}
@@ -136,8 +135,7 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 						int yd = newPos.y - activePassengers[j].getInitPos().y;
 						// if passenger is in the way, dont move!
 						if (activePassengers[j].getInitPos().y < tempInitPos.y && sqrt(xd*xd + yd + yd) < distanceCD) {
-							newPos -= vec2(0.0f, -activePassengers[i].getCurrSpeed() * doubleDt * simSpeed);
-							activePassengers[i].decelerate() * simSpeed;
+							newPos -= vec2(0.0f, -activePassengers[i].stop() * doubleDt * simSpeed);
 							break;
 						}
 					}
@@ -167,14 +165,15 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 						i != j) {
 						if (tempIsWalkingRight != activePassengers[j].getIsWalkingRight() && 
 							!activePassengers[j].getIsRowFound()) {
-							newPos = tempInitPos + vec2((activePassengers[i].getCurrSpeed() * doubleDt * simSpeed) / 4, 0.0f);
+							newPos = tempInitPos + vec2(activePassengers[i].decelerateToSlow() * doubleDt * simSpeed, 0.0f);
 							break;
 						}
 						else if (tempInitPos.x > activePassengers[j].getInitPos().x) {
-							vec2 newPos = tempInitPos + vec2(activePassengers[i].getCurrSpeed() * doubleDt * simSpeed, 0.0f);
+							newPos = tempInitPos + vec2(activePassengers[i].getCurrSpeed() * doubleDt * simSpeed, 0.0f);
 						}
 						else {
 							newPos = tempInitPos;
+							activePassengers[i].stop();
 						}
 					}
 
@@ -200,16 +199,17 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 						//If passsenger is not walking in the same direction as other passenger
 						if (tempIsWalkingRight != activePassengers[j].getIsWalkingRight() && 
 							!activePassengers[j].getIsRowFound()) {
-							newPos = tempInitPos + vec2((-activePassengers[i].getCurrSpeed() * doubleDt * simSpeed) / 4, 0.0f);
+							newPos = tempInitPos + vec2(-activePassengers[i].decelerateToSlow() * doubleDt * simSpeed, 0.0f);
 							break;
 						}
 						//Else if passenger is to the left of other passenger
 						else if (tempInitPos.x < activePassengers[j].getInitPos().x) {
-							vec2 newPos = tempInitPos + vec2(-activePassengers[i].getCurrSpeed() * doubleDt * simSpeed, 0.0f);
+							newPos = tempInitPos + vec2(-activePassengers[i].getCurrSpeed() * doubleDt * simSpeed, 0.0f);
 						}
 						//Else do not update position
 						else {
 							newPos = tempInitPos;
+							activePassengers[i].stop();
 						}
 					}
 

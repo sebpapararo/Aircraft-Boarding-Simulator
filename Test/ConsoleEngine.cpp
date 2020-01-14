@@ -119,14 +119,13 @@ void ConsoleEngine::runConsoleEngine() {
 	
 	//Runs the simulation until all passengers are seated
 	while (!c_activePassengers.empty()) {
-		c_PE.updatePositions(c_activePassengers, c_activeSeatedPassengers, c_aislePosY, startTimer);
+		c_PE.updatePositions(c_activePassengers, c_activeSeatedPassengers, c_aislePosY, startTime, totalPassengers);
 	}
 		
 	auto endTime = std::chrono::high_resolution_clock::now();
 	std::cout << "\nAll passengers are seated." << std::endl;
 	std::cout << "The algorithm used was: '" << c_currentAlgorithm << "' and the plane template was: '" << c_aircraftName << "'" << std::endl;
-	PhysicsEngine PE;
     std::cout << "Total number of seats/passengers was: " + totalPassengers << std::endl;
-	std::cout << "Everyone is seated. The total runtime was (in seconds): " << std::chrono::duration<double>(endTime - startTime).count() * PE.getSimSpeed() << std::endl;
-	std::cout << "Everyone is seated. Average time to be seated was (in seconds): " << c_PE.getAverageSeatedTime() / (double)CLOCKS_PER_SEC << std::endl;
+	std::cout << "Everyone is seated. The total runtime was (in seconds): " << std::chrono::duration<double>(endTime - startTime).count() * c_PE.getSimSpeed() << std::endl;
+	std::cout << "Everyone is seated. Average time per passenger to be seated was (in seconds): " << c_PE.getAverageSeatedTime() * c_PE.getSimSpeed() << std::endl;
 }

@@ -135,7 +135,7 @@ void GraphicsEngine::initSettings(int strategy, int layout, int doorConfig) {
 	totalPassengers = g_activePassengers.size();
 
 	g_PE.resetDelta();
-	startTime = glutGet(GLUT_ELAPSED_TIME);
+	startTime = std::chrono::high_resolution_clock::now();
 }
 
 //The method is run every frame to let the user set settings, run the simulation and render passengers
@@ -159,7 +159,7 @@ void GraphicsEngine::display() {
 	//Simulation
 	else {
 		//Passenger navigation
-		g_PE.updatePositions(g_activePassengers, g_activeSeatedPassengers, g_aislePosY, startTime);
+		g_PE.updatePositions(g_activePassengers, g_activeSeatedPassengers, g_aislePosY, startTime, totalPassengers);
 
 		if (!isConsole) {
 			//Draws seats
@@ -216,10 +216,11 @@ void GraphicsEngine::display() {
 			infoDisplay(runtimeResultText + std::to_string(totalRuntime.count()), displayX, displayY + spacing * 4);
 
 			if (isBoarded) {
-				infoDisplay("Average time to reach a seat (in seconds): " + std::to_string(g_PE.getAverageSeatedTime()), displayX, displayY + spacing * 5);
+				
+				infoDisplay("Average time per passenger to reach a seat (in seconds): " + std::to_string(g_PE.getAverageSeatedTime() * g_PE.getSimSpeed()), displayX, displayY + spacing * 5);
 			}
 			else {
-				infoDisplay("Average time to reach a seat (in seconds): running...", displayX, displayY + spacing * 5);
+				infoDisplay("Average time per passenger to reach a seat (in seconds): running...", displayX, displayY + spacing * 5);
 			}
 		}
 
@@ -290,6 +291,7 @@ void GraphicsEngine::processKeys(unsigned char key, int x, int y) {	//Takes keyb
 				displayX = -220.0f;
 				displayY = -40.0f;
 				spacing = -8.0f;
+			}
 			else if (mapSelect == 3) {
 				displayX = -330.0f;
 				displayY = -50.0f;
@@ -313,7 +315,6 @@ void GraphicsEngine::processKeys(unsigned char key, int x, int y) {	//Takes keyb
 		}
 	}
 	
-}
 
 void GraphicsEngine::processSpecialKeys(int key, int x, int y) {
 	if (!isStarted) {

@@ -2,6 +2,7 @@
 #include "Passenger.h"
 #include "GraphicsEngine.h"
 #include <glut/glut.h>  // GLUT, include glu.h and gl.h
+#include <chrono>
 
 #include <vector>
 using std::vector;
@@ -17,7 +18,7 @@ public:
 	double getSimSpeed();
 	void setSimSpeed(double speed);
     //void updatePositions(vector<Passenger> &activePassengers, vector<Passenger> &activeSeatedPassengers, float aislePosY);
-	void updatePositions(vector<Passenger> &activePassengers, vector<Passenger> &activeSeatedPassengers, vector<float> aislePosY, double startTime);
+	void updatePositions(vector<Passenger> &activePassengers, vector<Passenger> &activeSeatedPassengers, vector<float> aislePosY, std::chrono::steady_clock::time_point startTime, int noOfPassengers);
 	double getAverageSeatedTime();
 	void resetDelta();
 	void seatedPassengerPercentage(vector<Passenger> &activeSeatedPassengers, int noOfPassengers);

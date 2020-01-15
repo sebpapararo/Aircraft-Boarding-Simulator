@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.28307.852
+VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test", "Test\Test.vcxproj", "{E22E0560-7318-4660-BE6C-A46F93CEE9B4}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AircraftBoardingSimulator", "Test\Test.vcxproj", "{E22E0560-7318-4660-BE6C-A46F93CEE9B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

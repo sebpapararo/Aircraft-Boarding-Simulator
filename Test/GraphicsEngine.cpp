@@ -18,14 +18,17 @@ int mapSelect = 1;
 std::string strategiesList[] = { "Back-to-Front", "Inside-Out", "Outside-In", "Seat-by-Seat", "Random", "Row-by-Row" };
 std::string activeDoorsList[] = { "Rear", "Front", "Front and Rear" };
 std::string mapList[] = { "Airbus A319", "Airbus A321neo", "Airbus A380-800", "Boeing 737-800", "Boeing 767-300ER" };
+int simulationSpeed = 1;
 
 std::string setStrategyText = "--> Set boarding strategy: ";
 std::string setActiveDoorsTest = "Set active doors: ";
 std::string setMapText = "Set aircraft map: ";
+std::string setSimSpeed = "Set simulation speed: ";
 
 std::string selectedStrategyText = "Back-to-Front";
 std::string selectedDoorsText = "Rear";
 std::string selectedMapText = "Airbus A319";
+std::string selectedSimulationSpeed = "1";
 
 int totalPassengers = 0;
 
@@ -134,6 +137,8 @@ void GraphicsEngine::initSettings(int strategy, int layout, int doorConfig) {
 
 	totalPassengers = g_activePassengers.size();
 
+	g_PE.setSimSpeed(simulationSpeed);
+
 	g_PE.resetDelta();
 	startTime = std::chrono::high_resolution_clock::now();
 }
@@ -153,8 +158,9 @@ void GraphicsEngine::display() {
 		infoDisplay(setStrategyText + selectedStrategyText, -150.0f, 0.0f);
 		infoDisplay(setActiveDoorsTest + selectedDoorsText, -150.0f, -10.0f);
 		infoDisplay(setMapText + selectedMapText, -150.0f, -20.0f);
+		infoDisplay(setSimSpeed + selectedSimulationSpeed, -150.0f, -30.0f);
 
-		infoDisplay("Press 'ENTER' to start the simulation.", -150.0f, -40.0f);
+		infoDisplay("Press 'ENTER' to start the simulation.", -150.0f, -50.0f);
 	}
 	//Simulation
 	else {
@@ -213,14 +219,16 @@ void GraphicsEngine::display() {
 
 			infoDisplay("Total number of seats/passengers: " + std::to_string(totalPassengers), displayX, displayY + spacing * 3);
 
-			infoDisplay(runtimeResultText + std::to_string(totalRuntime.count()), displayX, displayY + spacing * 4);
+			infoDisplay("Simulation speed: " + std::to_string(simulationSpeed), displayX, displayY + spacing * 4);
+
+			infoDisplay(runtimeResultText + std::to_string(totalRuntime.count()), displayX, displayY + spacing * 5);
 
 			if (isBoarded) {
 				
-				infoDisplay("Average time per passenger to reach a seat (in seconds): " + std::to_string(g_PE.getAverageSeatedTime() * g_PE.getSimSpeed()), displayX, displayY + spacing * 5);
+				infoDisplay("Average time per passenger to reach a seat (in seconds): " + std::to_string(g_PE.getAverageSeatedTime() * g_PE.getSimSpeed()), displayX, displayY + spacing * 6);
 			}
 			else {
-				infoDisplay("Average time per passenger to reach a seat (in seconds): running...", displayX, displayY + spacing * 5);
+				infoDisplay("Average time per passenger to reach a seat (in seconds): running...", displayX, displayY + spacing * 6);
 			}
 		}
 
@@ -324,18 +332,28 @@ void GraphicsEngine::processSpecialKeys(int key, int x, int y) {
 				setStrategyText = "--> Set boarding strategy: ";
 				setActiveDoorsTest = "Set active doors: ";
 				setMapText = "Set aircraft map: ";
+				setSimSpeed = "Set simulation speed: ";
 			}
 			else if (menuSelect == 3) {
 				menuSelect--;
 				setStrategyText = "Set boarding strategy: ";
 				setActiveDoorsTest = "--> Set active doors: ";
 				setMapText = "Set aircraft map: ";
+				setSimSpeed = "Set simulation speed: ";
 			}
-			else {
-				menuSelect = 3;
+			else if (menuSelect == 4) {
+				menuSelect--;
 				setStrategyText = "Set boarding strategy: ";
 				setActiveDoorsTest = "Set active doors: ";
 				setMapText = "--> Set aircraft map: ";
+				setSimSpeed = "Set simulation speed: ";
+			}
+			else {
+				menuSelect = 4;
+				setStrategyText = "Set boarding strategy: ";
+				setActiveDoorsTest = "Set active doors: ";
+				setMapText = "Set aircraft map: ";
+				setSimSpeed = "--> Set simulation speed: ";
 			}
 		}
 		else if (key == GLUT_KEY_DOWN) {
@@ -344,18 +362,28 @@ void GraphicsEngine::processSpecialKeys(int key, int x, int y) {
 				setStrategyText = "Set boarding strategy: ";
 				setActiveDoorsTest = "--> Set active doors: ";
 				setMapText = "Set aircraft map: ";
+				setSimSpeed = "Set simulation speed: ";
 			}
 			else if (menuSelect == 2) {
 				menuSelect++;
 				setStrategyText = "Set boarding strategy: ";
 				setActiveDoorsTest = "Set active doors: ";
 				setMapText = "--> Set aircraft map: ";
+				setSimSpeed = "Set simulation speed: ";
+			}
+			else if (menuSelect == 3) {
+				menuSelect++;
+				setStrategyText = "Set boarding strategy: ";
+				setActiveDoorsTest = "Set active doors: ";
+				setMapText = "Set aircraft map: ";
+				setSimSpeed = "--> Set simulation speed: ";
 			}
 			else {
 				menuSelect = 1;
 				setStrategyText = "--> Set boarding strategy: ";
 				setActiveDoorsTest = "Set active doors: ";
 				setMapText = "Set aircraft map: ";
+				setSimSpeed = "Set simulation speed: ";
 			}
 		}
 		else if (key == GLUT_KEY_RIGHT) {
@@ -380,6 +408,13 @@ void GraphicsEngine::processSpecialKeys(int key, int x, int y) {
 				}
 				selectedMapText = mapList[mapSelect - 1];
 			}
+			else if (menuSelect == 4) {
+				simulationSpeed++;
+				if (simulationSpeed > 10) {
+					simulationSpeed = 1;
+				}
+				selectedSimulationSpeed = std::to_string(simulationSpeed);
+			}
 		}
 		else if (key == GLUT_KEY_LEFT) {
 			if (menuSelect == 1) {
@@ -402,6 +437,13 @@ void GraphicsEngine::processSpecialKeys(int key, int x, int y) {
 					mapSelect = (sizeof(mapList) / sizeof(mapList[0]));
 				}
 				selectedMapText = mapList[mapSelect - 1];
+			}
+			else if (menuSelect == 4) {
+				simulationSpeed--;
+				if (simulationSpeed < 1) {
+					simulationSpeed = 10;
+				}
+				selectedSimulationSpeed = std::to_string(simulationSpeed);
 			}
 		}
 	}

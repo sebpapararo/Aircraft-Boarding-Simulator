@@ -37,7 +37,7 @@ private:
 	vec2 initPos;
 	float aisleY;
 	// 12 is equivalent to 1 meter per second
-	float maxSpeed = 12.0f;
+	float maxSpeed = 3.0f;
 	float currSpeed = 0.0f;
 	bool isYAlignedWithAisle = false;
 	bool isRowFound = false;

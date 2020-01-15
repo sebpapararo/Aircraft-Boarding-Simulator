@@ -240,7 +240,7 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 			if (p->getBaggageTimerStart() <= 0) {	//Sets timer when passenger starts to enter the seat row
 				p->setBaggageTimerStart(glutGet(GLUT_ELAPSED_TIME));
 			}
-			else if ((glutGet(GLUT_ELAPSED_TIME) - p->getBaggageTimerStart()) < 1000 / simSpeed) {	//If passenger waits less than one second
+			else if ((glutGet(GLUT_ELAPSED_TIME) - p->getBaggageTimerStart()) < 5000 / simSpeed) {	//If passenger waits less than one second
 				//Do nothing
 			}
 

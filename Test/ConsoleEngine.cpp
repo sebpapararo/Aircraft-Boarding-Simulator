@@ -143,4 +143,5 @@ void ConsoleEngine::runConsoleEngine() {
     std::cout << "Total number of seats/passengers was: " + totalPassengers << std::endl;
 	std::cout << "Everyone is seated. The total runtime was (in seconds): " << std::chrono::duration<double>(endTime - startTime).count() * c_PE.getSimSpeed() << std::endl;
 	std::cout << "Everyone is seated. Average time per passenger to be seated was (in seconds): " << c_PE.getAverageSeatedTime() * c_PE.getSimSpeed() << std::endl;
+	system("pause");
 }

@@ -274,7 +274,7 @@ void PhysicsEngine::updatePositions(vector<Passenger> &activePassengers, vector<
 double PhysicsEngine::getAverageSeatedTime() {
 	return averageSeatedTime;
 }
-
+	
 void PhysicsEngine::resetDelta() {
 	lastDelta = Time::now();
 	currentDelta = lastDelta;

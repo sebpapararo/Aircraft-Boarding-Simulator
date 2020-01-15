@@ -169,9 +169,8 @@ void GraphicsEngine::display() {
 
 		//Runtime timing
 		if (!g_activePassengers.empty()) {
-			auto endTime = std::chrono::high_resolution_clock::now();;
-			PhysicsEngine PE;
-			totalRuntime = (endTime - startTime) / 1000 * PE.getSimSpeed();
+			auto endTime = std::chrono::high_resolution_clock::now();
+			totalRuntime = (endTime - startTime) / 1000 * g_PE.getSimSpeed();
 		}
 		
 		if (!isConsole) {

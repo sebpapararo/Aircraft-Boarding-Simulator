@@ -307,12 +307,12 @@ void GraphicsEngine::processKeys(unsigned char key, int x, int y) {	//Takes keyb
 				displayY = -50.0f;
 				spacing = -9.0f;
 			}
-			startTime = std::chrono::high_resolution_clock::now();
+				startTime = std::chrono::high_resolution_clock::now();
 			}
-		}
-		else {
-			isStarted = false;
-			zoom = 0;
+			else {
+				isStarted = false;
+				zoom = 0;
+			}
 		}
 	}
 	

@@ -221,7 +221,6 @@ void GraphicsEngine::display() {
 			}
 			else {
 				infoDisplay("Average time per passenger to reach a seat (in seconds): running...", displayX, displayY + spacing * 5);
-				infoDisplay("Average time per passenger to reach a seat (in seconds): running...", displayX, displayY + spacing * 5);
 			}
 		}
 

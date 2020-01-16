@@ -68,7 +68,7 @@ void ConsoleEngine::init() {
 	std::cin >> algorithmChoice;
 
 	// Let the user try again if entered an invalid number
-	while (algorithmChoice != 1 && algorithmChoice != 2 && algorithmChoice != 3 && algorithmChoice != 4) {
+	while (algorithmChoice != 1 && algorithmChoice != 2 && algorithmChoice != 3 && algorithmChoice != 4 && algorithmChoice != 5 && algorithmChoice != 6) {
 		std::cout << "Invalid number. Please enter '1' for Back-to-Front, '2' for Inside-Out, '3' for Outside-In, '4' for Seat-by-Seat, '5' for Random or '6' for Row-by-Row: ";
 		std::cin >> algorithmChoice;
 	}
